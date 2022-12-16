@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codeljx.Dao.UserDao">
+    <update id="updateUser">
+        update user set
+        <if test="user.name != null">name = #{user.name},</if>
+        <if test="user.phone != null">phone = #{user.phone},</if>
+        <if test="user.address != null">address = #{user.address},</if>
+        modyfiBy = #{modyfiBy}, modyfy_time = now()
+    </update>
+
+    <select id="insertUser" resultType="java.lang.Integer">
+       insert  into user (name,phone,address,password)
+       value (#{user.name},#{user.phone},#{user.address},#{user.password})
+    </select>
+
+</mapper>

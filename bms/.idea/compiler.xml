@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="reids" />
+        <module name="role" />
+        <module name="esDB" />
+        <module name="user" />
+        <module name="annotion" />
+        <module name="DB" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="es" target="8" />
+      <module name="esBots" target="8" />
+      <module name="tt" target="8" />
+      <module name="wrapper" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="DB" options="-parameters" />
+      <module name="annotion" options="-parameters" />
+      <module name="bms" options="-parameters" />
+      <module name="es" options="-parameters" />
+      <module name="esBots" options="-parameters" />
+      <module name="esDB" options="-parameters" />
+      <module name="reids" options="-parameters" />
+      <module name="role" options="-parameters" />
+      <module name="tt" options="-parameters" />
+      <module name="user" options="-parameters" />
+    </option>
+  </component>
+</project>
