@@ -69,11 +69,6 @@ public class Connection {
 //       获取响应内容以及响应头
                 String message = EntityUtils.toString(entity, "UTF-8");
                 Header[] allHeaders = response.getAllHeaders();
-
-                if (message != null) {
-                    System.out.println("响应头：" + allHeaders);
-                    System.out.println("Response content: " + message);
-                }
 //       *关闭连接,释放资源
             } finally {
                 response.close();

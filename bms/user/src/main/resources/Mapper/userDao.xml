@@ -10,8 +10,12 @@
     </update>
 
     <select id="insertUser" resultType="java.lang.Integer">
-       insert  into user (name,phone,address,password)
-       value (#{user.name},#{user.phone},#{user.address},#{user.password})
+       insert  into user (name,phone,address,password,create_time)
+       value (#{user.name},#{user.phone},#{user.address},#{user.password},now())
+    </select>
+
+    <select id="queryUserFormPwd" resultType="DB.User">
+        select id,name from user where password = #{user.password} and name = #{user.name} and is_delete = 0
     </select>
 
 </mapper>

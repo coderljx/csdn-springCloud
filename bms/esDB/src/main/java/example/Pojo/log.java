@@ -17,5 +17,6 @@ public class log {
     private String params;
     @Field
     private String resparams;
-
+    @Field
+    private String createDate;
 }

@@ -1,5 +1,6 @@
 package LjxUtils;
 
+import DB.User;
 import LjxEx.TypeException;
 
 import java.util.Map;
@@ -10,4 +11,10 @@ public class Validate {
 
         return true;
     }
+
+    public User validate(String appid, String appkey, Integer userid, String params) throws TypeException {
+
+        return new User();
+    }
+
 }

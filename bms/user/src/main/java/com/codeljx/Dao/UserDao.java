@@ -4,6 +4,7 @@ import DB.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ public interface UserDao {
     Integer updateUser(@Param("user") User user,
                        @Param("modyfiBy") String modyfiBy);
 
+
+    User queryUserFormPwd(@Param("user") User user);
 
 
 }

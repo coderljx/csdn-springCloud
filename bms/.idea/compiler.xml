@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="reids" />
-        <module name="role" />
         <module name="esDB" />
         <module name="user" />
         <module name="annotion" />
@@ -18,6 +17,7 @@
     <bytecodeTargetLevel>
       <module name="es" target="8" />
       <module name="esBots" target="8" />
+      <module name="role" target="1.8" />
       <module name="tt" target="8" />
       <module name="wrapper" target="1.5" />
     </bytecodeTargetLevel>
