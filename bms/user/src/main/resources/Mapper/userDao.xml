@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.codeljx.Dao.UserDao">
+<mapper namespace="com.codeljxUser.Dao.UserDao">
     <update id="updateUser">
         update user set
         <if test="user.name != null">name = #{user.name},</if>
         <if test="user.phone != null">phone = #{user.phone},</if>
         <if test="user.address != null">address = #{user.address},</if>
+        <if test="user.roleid != null">roleid = #{user.roleid},</if>
         modyfiBy = #{modyfiBy}, modyfy_time = now()
     </update>
 
-    <select id="insertUser" resultType="java.lang.Integer">
+    <update id="deleteUser">
+        update user set is_delete = 1, modyfy_time = now(), modyfiBy = #{modyfiBy}
+                        where id = #{userid}
+    </update>
+
+    <insert id="insertUser">
        insert  into user (name,phone,address,password,create_time)
        value (#{user.name},#{user.phone},#{user.address},#{user.password},now())
-    </select>
+    </insert>
 
-    <select id="queryUserFormPwd" resultType="DB.User">
-        select id,name from user where password = #{user.password} and name = #{user.name} and is_delete = 0
+    <select id="queryUserFormPwd" resultType="Pojo.DB.User">
+        select id,name,phone from user where password = #{user.password} and name = #{user.name} and is_delete = 0
+    </select>
+    <select id="queryUserFormPhone" resultType="Pojo.DB.User">
+        select id,name,phone from user where phone = #{user.phone} and is_delete = 0
     </select>
 
 </mapper>

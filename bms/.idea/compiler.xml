@@ -9,30 +9,19 @@
         <outputRelativeToContentRoot value="true" />
         <module name="reids" />
         <module name="esDB" />
+        <module name="title" />
         <module name="user" />
         <module name="annotion" />
-        <module name="DB" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="es" target="8" />
-      <module name="esBots" target="8" />
-      <module name="role" target="1.8" />
-      <module name="tt" target="8" />
-      <module name="wrapper" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DB" options="-parameters" />
       <module name="annotion" options="-parameters" />
       <module name="bms" options="-parameters" />
-      <module name="es" options="-parameters" />
-      <module name="esBots" options="-parameters" />
       <module name="esDB" options="-parameters" />
       <module name="reids" options="-parameters" />
-      <module name="role" options="-parameters" />
-      <module name="tt" options="-parameters" />
+      <module name="title" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>
   </component>

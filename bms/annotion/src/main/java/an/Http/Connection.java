@@ -1,6 +1,5 @@
 package an.Http;
 
-import DB.Log;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
