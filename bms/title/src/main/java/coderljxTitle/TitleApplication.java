@@ -5,7 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"coderljxTitle","LjxRedis"})
+@SpringBootApplication(scanBasePackages = {"coderljxTitle","LjxRedis","an"})
 @MapperScan({"coderljxTitle.Dao","com.codeljxUser.Dao"})
 public class TitleApplication {
 

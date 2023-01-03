@@ -25,11 +25,10 @@ public class UserService extends Validate {
     private UserMagr userMagr;
 
 
-    @PostMapping("/login/{appid}/{userid}")
+    @PostMapping("/login/{appid}")
     @LogEs(url = "/user/login",dec = "用户登录")
     public Response<?> userLogin(
             @PathVariable String appid,
-            @PathVariable Integer userid,
             @RequestParam(value = "",required = false) String sign,
             @RequestBody String data
     ){

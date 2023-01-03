@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coderljxTitle.Dao.TextDao">
+    <insert id="addUserText">
+        insert  into text(detail,uid,create_by,create_time,coverPhoto,titleIdStr,textType,releaseForm,contextLevel,imageStr,coverTitle)
+        values (#{text.detail},#{text.uid},#{text.create_by},now(),#{text.coverPhoto},#{text.titleIdStr},#{text.textType},#{text.releaseForm},
+                #{text.contextLevel},#{text.imageStr},#{text.coverTitle})
+    </insert>
+    <update id="deleteUserText">
+        update text set is_delete = 1 ,
+                        modify_by = #{modifyBy} ,
+                        modify_time = now()
+        where id = #{id}
+    </update>
+
+
+    <select id="getUserText" resultType="Pojo.DB.Text">
+        SELECT * FROM text WHERE uid = #{userid} AND is_delete = 0
+    </select>
+</mapper>

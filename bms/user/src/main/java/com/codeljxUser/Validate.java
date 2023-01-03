@@ -21,14 +21,14 @@ public class Validate {
         return true;
     }
 
-    public User validate(String appid, Integer userid,String sign, String params) throws TypeException {
+    public User validate(String appid, Integer userid,String sign, String params)  {
 
 //        this.validate(appid, userid,sign);
 
         return this.validate(appid, userid,sign);
     }
 
-    public User validate(String appid, Integer userid,String sign) throws TypeException {
+    public User validate(String appid, Integer userid,String sign) {
 
         String key = (String) redisString.getKey(userid + "");
         if (StringUtils.isEmp(key)) throw new TypeException("用户未登录或已过期");
