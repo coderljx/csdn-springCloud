@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_ADDITIONAL_VM_OPTIONS" value="-Djps.track.ap.dependencies=false" />
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -12,6 +13,7 @@
         <module name="title" />
         <module name="user" />
         <module name="annotion" />
+        <module name="gateWay" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +22,7 @@
       <module name="annotion" options="-parameters" />
       <module name="bms" options="-parameters" />
       <module name="esDB" options="-parameters" />
+      <module name="gateWay" options="-parameters" />
       <module name="reids" options="-parameters" />
       <module name="title" options="-parameters" />
       <module name="user" options="-parameters" />

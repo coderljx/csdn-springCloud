@@ -46,7 +46,7 @@ public class LogEsImpl {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         LogEs annotation = method.getAnnotation(LogEs.class);
-        JSONObject of = JSONObject.of("url", annotation.url(), "dec", annotation.dec(), "params", Arrays.toString(args), "resparams", log.getResparams());
+        JSONObject of = JSONObject.of("url", annotation.url(), "dec", annotation.dec(), "params", Arrays.toString(args), "resparams", result);
         Connection.httpPost(of);
     }
 

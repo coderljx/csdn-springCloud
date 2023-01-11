@@ -24,7 +24,6 @@ public class UserService extends Validate {
     @Resource
     private UserMagr userMagr;
 
-
     @PostMapping("/login/{appid}")
     @LogEs(url = "/user/login",dec = "用户登录")
     public Response<?> userLogin(
@@ -42,8 +41,8 @@ public class UserService extends Validate {
             int status = (int) map.get("status");
 
             switch (status) {
-                case 1 : break;
-                case 2 : break;
+//                case 1 : break;
+//                case 2 : break;
                 case 3 :
                     if (StringUtils.isEmp(user.getName())){
                         throw new TypeException("用户名不能为空");
@@ -170,7 +169,6 @@ public class UserService extends Validate {
             @PathVariable String appid,
             @PathVariable Integer userid,
             @RequestParam(value = "",required = false) String sign
-
     ){
         Coco coco = Coco.ok;
         List<User> user = null;
