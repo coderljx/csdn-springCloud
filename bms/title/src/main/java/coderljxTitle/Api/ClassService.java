@@ -8,7 +8,9 @@ import Pojo.LjxUtils.MapUtils;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.ModuleMgr;
 import com.codeljxUser.Validate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,6 +21,11 @@ public class ClassService extends Validate {
 
     @Resource
     private ModuleMgr moduleMgr;
+    @Autowired
+    private coderljxTitle.Dao.kk kk;
+
+    @Resource
+    private RestTemplate restTemplate;
 
     @GetMapping("/get/{appid}/{userid}")
     @LogEs(url = "/class/get",dec = "获取当前所有模块")
@@ -31,7 +38,13 @@ public class ClassService extends Validate {
         Response<?> response = null;
         List<Module> data = null;
         try {
-            validate(appid,userid,sign);
+//            validate(appid,userid,sign);
+
+//            ResponseEntity<String> a = restTemplate.getForEntity("http://userService/userService/api/user/a", String.class);
+//            System.out.println(a.getBody());
+            System.out.println(kk.koko());
+
+
             data = moduleMgr.queryModule();
         }catch (Pojo.LjxEx.TypeException message) {
             coco.code = -100;
