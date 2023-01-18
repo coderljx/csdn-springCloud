@@ -1,5 +1,6 @@
 package coderljxTitle.Dao;
 
+import Pojo.DB.Advertisement;
 import Pojo.DB.Text;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,5 +27,11 @@ public interface TextDao {
 
     Integer deleteUserText(@Param("id")Integer id,
                            @Param("modifyBy")String modifyBy);
+
+    /**
+     * 获取广告信息
+     * @return
+     */
+    List<Advertisement> getAdv(@Param("list") List<Integer> imgId);
 
 }

@@ -7,51 +7,33 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Configuration
 public class Routes {
-
-    @Resource
-    private Config config;
 
     @Resource
     private DiscoveryClient discoveryClient;
 
     @Bean
     public RouteLocator userRoutes(RouteLocatorBuilder builder) {
-        List<String> services = discoveryClient.getServices();
-        services.forEach(System.out::println);
-
         return builder.routes()
-                .route(per ->
-                        per.predicate(serverWebExchange -> {
-                            String parse = Utils.parse(serverWebExchange,"userService");
-                            String[] split = parse.split("-");
-                            boolean ist = Boolean.parseBoolean(split[0]);
-                            if (ist) {
-                                config.setUserService(config.getUserService() + split[1]);
-                            }
-                            return ist;
-                        })
-                        .uri(config.getUserService()))
+                .route("userService", per ->
+                        per.path("/userService/**")
+                                .uri("lb://userService"))
+                .route( per ->
+                        per.path("/titleService/**")
+                                .uri("lb://titleService"))
                 .build();
     }
 
-    @Bean
-    public RouteLocator titleRoutes(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route(per ->
-                        per.predicate(serverWebExchange -> {
-                            String parse = Utils.parse(serverWebExchange,"titleService");
-                            String[] split = parse.split("-");
-                            boolean ist = Boolean.parseBoolean(split[0]);
-                            if (ist) {
-                                config.setTitleService(config.getTitleService() + split[1]);
-                            }
-                            return ist;
-                        })
-                                .uri(config.getTitleService()))
-                .build();
-    }
+
+
+
+//    public String getService(String service) {
+//        List<ServiceInstance> instances = discoveryClient.getInstances(service);
+//        ServiceInstance serviceInstance = instances.get(0);
+//        return serviceInstance.getUri().toString();
+//    }
+
+
 }

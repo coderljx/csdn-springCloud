@@ -9,6 +9,7 @@ public enum Coco {
     ParamsTypeError("请求参数类型错误", -108),
     LogTypeError("日志类型错误", -109),
     IndexNameNotFound("当前索引库不存在",-110),
+    InitCoco("",0),
 
 
     ok("Success", 200);

@@ -8,7 +8,6 @@ import Pojo.LjxUtils.MapUtils;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.ModuleMgr;
 import com.codeljxUser.Validate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,8 +20,6 @@ public class ClassService extends Validate {
 
     @Resource
     private ModuleMgr moduleMgr;
-    @Autowired
-    private coderljxTitle.Dao.kk kk;
 
     @Resource
     private RestTemplate restTemplate;
@@ -34,22 +31,23 @@ public class ClassService extends Validate {
             @PathVariable Integer userid,
             @RequestParam(value = "",required = false) String sign
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         List<Module> data = null;
         try {
-//            validate(appid,userid,sign);
+            validate(appid,userid,sign);
 
 //            ResponseEntity<String> a = restTemplate.getForEntity("http://userService/userService/api/user/a", String.class);
 //            System.out.println(a.getBody());
-            System.out.println(kk.koko());
-
 
             data = moduleMgr.queryModule();
+            coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception message) {
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = message.getMessage();
         } finally {
@@ -67,17 +65,20 @@ public class ClassService extends Validate {
             @RequestParam(value = "",required = false) String sign,
             @RequestBody String data
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             User user = validate(appid, userid, sign, data);
             Module module = MapUtils.MapToObject(data, Module.class);
 
             moduleMgr.addModules(module, user.getName());
+            coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {

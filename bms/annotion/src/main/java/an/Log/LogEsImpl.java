@@ -1,5 +1,6 @@
 package an.Log;
 
+import an.Http.Connection;
 import com.alibaba.fastjson2.JSONObject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -48,7 +49,7 @@ public class LogEsImpl {
         Method method = methodSignature.getMethod();
         LogEs annotation = method.getAnnotation(LogEs.class);
         JSONObject of = JSONObject.of("url", annotation.url(), "dec", annotation.dec(), "params", Arrays.toString(args), "resparams", result);
-//        Connection.httpPost(of);
+        Connection.httpPost(of);
     }
 
 

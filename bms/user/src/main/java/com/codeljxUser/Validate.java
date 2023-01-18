@@ -28,7 +28,7 @@ public class Validate {
         return this.validate(appid, userid,sign);
     }
 
-    public User validate(String appid, Integer userid,String sign) {
+    public User validate(String appid, Integer userid,String sign) throws TypeException {
 
         String key = (String) redisString.getKey(userid + "");
         if (StringUtils.isEmp(key)) throw new TypeException("用户未登录或已过期");

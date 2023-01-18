@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Connection {
 
@@ -50,7 +48,8 @@ public class Connection {
         // *创建默认的httpClient实例(CloseableHttpClient).
         CloseableHttpClient httpclient = HttpClients.createDefault();
         // *创建HttpPost
-        HttpPost httppost = new HttpPost("http://localhost:5400/es/create");
+        //        "http://localhost:5400/es/create"
+        HttpPost httppost = new HttpPost("http://192.168.0.109:5400/es/create");
         // *创建参数队列
         UrlEncodedFormEntity uefEntity;
         try {

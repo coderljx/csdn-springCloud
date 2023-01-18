@@ -37,7 +37,7 @@ public class TextService extends Validate {
             @RequestParam(value = "contextLevel",required = false) Character contextLevel,
             @RequestParam(value = "coverTitle",required = false) String coverTitle
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             if (StringUtils.isEmp(titleStr)) throw new TypeException("titleStr 不可为空");
@@ -47,10 +47,13 @@ public class TextService extends Validate {
 
             validate(appid, userid, sign);
             textMgr.addUserText(detail,userid,coverPhoto,titleStr,textType,releaseForm,contextLevel,file,coverTitle);
+            coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -67,16 +70,19 @@ public class TextService extends Validate {
             @RequestParam(value = "",required = false) String sign,
             @RequestBody String data
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         List<Text> textList = null;
         try {
             validate(appid, userid, sign, data);
             textList = textMgr.getUserText(userid);
+            coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -93,18 +99,20 @@ public class TextService extends Validate {
             @RequestParam(value = "",required = false) String sign,
             @RequestParam(value = "id",required = false) Integer id
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             User user = validate(appid, userid, sign);
 
             textMgr.deleteUserText(id, user.getName());
 
-
+            coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -112,6 +120,39 @@ public class TextService extends Validate {
         }
         return response;
     }
+
+
+
+    @GetMapping("/getAvdText/{appid}/{userid}")
+    @LogEs(url = "/text/getAvdText",dec = "获取头条，热点，广告等信息")
+    public Response<?> getAvdText(
+            @PathVariable String appid,
+            @PathVariable Integer userid,
+            @RequestParam(value = "",required = false) String sign,
+            @RequestParam(value = "id",required = false) Integer id
+    ){
+        Coco coco = null;
+        Response<?> response = null;
+        try {
+            User user = validate(appid, userid, sign);
+
+            textMgr.getAvdText();
+            coco = Coco.ok;
+        }catch (Pojo.LjxEx.TypeException message) {
+            coco = Coco.InitCoco;
+            coco.code = -100;
+            coco.message = message.getMessage();
+        }catch (Exception e){
+            coco = Coco.InitCoco;
+            coco.code = -101;
+            coco.message = e.getMessage();
+        }finally {
+            response = new Response<>(coco);
+        }
+        return response;
+    }
+
+
 
 
 }

@@ -32,7 +32,7 @@ public class UserService extends Validate {
             @RequestBody String data
     ){
         User user = null;
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
 //            validate(appid,userid,data);
@@ -53,10 +53,13 @@ public class UserService extends Validate {
                     break;
             }
             user = userMagr.loginUser(user, status);
+            coco = Coco.ok;
         }catch (TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -75,7 +78,7 @@ public class UserService extends Validate {
             @RequestBody String data
     ){
         User user = null;
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             validate(appid, appkey,sign, data);
@@ -88,10 +91,13 @@ public class UserService extends Validate {
                 throw new TypeException("密码不能为空");
             }
             userMagr.registUser(user);
+            coco = Coco.ok;
         }catch (TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -110,7 +116,7 @@ public class UserService extends Validate {
             @RequestBody String data
     ){
         User user = null;
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             User validate = validate(appid, userid, sign,data);
@@ -119,11 +125,13 @@ public class UserService extends Validate {
             if (StringUtils.isEmp(user.getName())){
                 throw new TypeException("用户名不能为空");
             }
-
+            coco = Coco.ok;
         }catch (TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -141,7 +149,7 @@ public class UserService extends Validate {
             @RequestParam(value = "",required = false) Integer roleid,
             @RequestParam(value = "",required = false) String sign
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             User validate = validate(appid, userid,sign);
@@ -150,10 +158,13 @@ public class UserService extends Validate {
             if (StringUtils.isEmp(roleid + "")) throw new TypeException("roleid不能为空");
 
             userMagr.setUserRole(roleid,validate.getName());
+            coco = Coco.ok;
         }catch (TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -170,16 +181,19 @@ public class UserService extends Validate {
             @PathVariable Integer userid,
             @RequestParam(value = "",required = false) String sign
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         List<User> user = null;
         Response<?> response = null;
         try {
 //            validate(appid, userid, data,sign);
               user = userMagr.getUser();
+              coco = Coco.ok;
         }catch (TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -196,16 +210,20 @@ public class UserService extends Validate {
             @PathVariable Integer userid,
             @RequestParam(value = "",required = false) String sign
     ){
-        Coco coco = Coco.ok;
+        Coco coco = null;
         Response<?> response = null;
         try {
             User validate = validate(appid, userid,sign);
             if (validate == null) throw new TypeException("该用户不存在或已停用");
             userMagr.deleteUser(userid,validate.getName());
+
+            coco = Coco.ok;
         }catch (TypeException message) {
+            coco = Coco.InitCoco;
             coco.code = -100;
             coco.message = message.getMessage();
         }catch (Exception e){
+            coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
@@ -218,6 +236,7 @@ public class UserService extends Validate {
     @GetMapping("/a")
     public Response<?> asdsa(
     ){
+
         return new Response<>();
     }
 

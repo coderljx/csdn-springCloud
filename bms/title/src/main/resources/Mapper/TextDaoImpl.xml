@@ -17,4 +17,13 @@
     <select id="getUserText" resultType="Pojo.DB.Text">
         SELECT * FROM text WHERE uid = #{userid} AND is_delete = 0
     </select>
+
+    <select id="getAdv" resultType="Pojo.DB.Advertisement" parameterType="list">
+        SELECT * FROM advertisement where id in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        AND is_delete = 0
+    </select>
+
 </mapper>
