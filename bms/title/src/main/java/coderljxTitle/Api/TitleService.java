@@ -83,7 +83,6 @@ public class TitleService extends Validate {
             @RequestParam(value = "",required = false) String sign,
             HttpServletResponse httpServletResponse
     ){
-        Coco coco = null;
         try {
             System.out.println(url);
 //            httpServletResponse.setHeader("Content-Type","application/x-img");
@@ -91,15 +90,8 @@ public class TitleService extends Validate {
             byte[] bytes = FileUtils.readFile("C:" + url);
             outputStream.write(bytes);
 
-            coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
         }catch (Exception e){
-            coco = Coco.InitCoco;
-            coco.code = -101;
-            coco.message = e.getMessage();
         }
     }
 

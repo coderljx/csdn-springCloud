@@ -56,6 +56,13 @@ public class TextMgr {
         textDao.deleteUserText(id, modifyBY);
     }
 
+
+    /**
+     * 保存文件
+     * @param files
+     * @return
+     * @throws IOException
+     */
     private String saveFIle(MultipartFile[] files) throws IOException {
         StringBuilder str = new StringBuilder();
         if (!(files == null || files.length == 0)) {
