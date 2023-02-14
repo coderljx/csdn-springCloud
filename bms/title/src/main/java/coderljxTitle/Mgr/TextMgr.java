@@ -2,6 +2,8 @@ package coderljxTitle.Mgr;
 
 import Pojo.DB.Advertisement;
 import Pojo.DB.Text;
+import Pojo.LjxEx.TypeException;
+import Pojo.LjxUtils.ThreadUtils;
 import Pojo.LjxUtils.UUID;
 import coderljxTitle.Dao.TextDao;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class TextMgr {
@@ -23,42 +26,49 @@ public class TextMgr {
     @Value("${file.exoprt}")
     private String fileExport;
 
-    public List<Text> getUserText(Integer userid){
+    public List<Text> getUserText(Integer userid) {
         return textDao.getUserText(userid);
     }
 
     /**
      * 给用户新增一个文章
-     * @param detail 文章内容
-     * @param uid 用户id
-     * @param coverPhoto 封面图片文件
-     * @param titleIdStr 文章标签id
-     * @param textType 文章类型
-     * @param releaseForm 发布形式
+     *
+     * @param detail       文章内容
+     * @param uid          用户id
+     * @param coverPhoto   封面图片文件
+     * @param titleIdStr   文章标签id
+     * @param textType     文章类型
+     * @param releaseForm  发布形式
      * @param contextLevel 内容等级
-     * @param file 文章中上传的文件
-     * @param coverTitle 封面标题
+     * @param file         文章中上传的文件
+     * @param coverTitle   封面标题
      */
     public void addUserText(String detail, Integer uid, MultipartFile[] coverPhoto, String titleIdStr, Character textType,
-                            Character releaseForm, Character contextLevel,MultipartFile[] file,String coverTitle) throws IOException {
-        String coverPhotoStr = this.saveFIle(coverPhoto);
-        String imageStr = this.saveFIle(file);
-        Text text = new Text(detail,uid, coverPhotoStr,titleIdStr,textType,releaseForm,contextLevel, imageStr,coverTitle);
+                            Character releaseForm, Character contextLevel, MultipartFile[] file, String coverTitle)
+            throws  ExecutionException, InterruptedException {
+        /**
+         * 从线程池中拿两个线程分别执行文件保存操作，比之前一个线程运行的要快
+         */
+        String coverPhotoStr  = ThreadUtils.invoke(() -> saveFIle(coverPhoto)).get();
+        String imageStr = ThreadUtils.invoke(() -> saveFIle(file)).get();
+        Text text = new Text(detail, uid, coverPhotoStr, titleIdStr, textType, releaseForm, contextLevel, imageStr, coverTitle);
         textDao.addUserText(text);
     }
 
     /**
      * 删除用户的文章
+     *
      * @param id
      * @param modifyBY
      */
-    public void deleteUserText(Integer id, String modifyBY){
+    public void deleteUserText(Integer id, String modifyBY) {
         textDao.deleteUserText(id, modifyBY);
     }
 
 
     /**
      * 保存文件
+     *
      * @param files
      * @return
      * @throws IOException
@@ -67,14 +77,17 @@ public class TextMgr {
         StringBuilder str = new StringBuilder();
         if (!(files == null || files.length == 0)) {
             for (MultipartFile multipartFile : files) {
-                String contentType = Objects.requireNonNull(multipartFile.getContentType()).substring(0,
+                String contentType = Objects.requireNonNull(
+                        multipartFile.getContentType()).substring(0,
                         multipartFile.getContentType().indexOf("application/"));
                 String filePath = fileExport + File.separator + UUID.getUUID() + "." + contentType;
                 str.append(filePath).append(",");
                 multipartFile.transferTo(new File(filePath));
             }
+        } else {
+            throw new TypeException("上传的文件为空");
         }
-        return str.substring(0,str.length() -1);
+        return str.substring(0, str.length() - 1);
     }
 
     /**
@@ -90,7 +103,6 @@ public class TextMgr {
             System.out.println(item.getFileUrl());
         });
     }
-
 
 
 }
