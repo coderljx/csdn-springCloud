@@ -180,12 +180,11 @@ public class TextService extends Validate {
     ) {
         Coco coco = null;
         Response<?> response = null;
+        List<Text> followedText = null;
         try {
-            User user = validate(appid, userid, sign);
+//            User user = validate(appid, userid, sign);
 
-
-
-
+            followedText = textMgr.getFollowedText(userid);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
@@ -198,7 +197,7 @@ public class TextService extends Validate {
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
-            response = new Response<>(coco);
+            response = new Response<>(coco,followedText);
         }
         return response;
     }

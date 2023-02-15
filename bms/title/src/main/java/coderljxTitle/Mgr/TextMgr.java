@@ -113,8 +113,9 @@ public class TextMgr {
      * 获得关注的人发布的文章
      * @param userid
      */
-    public void getFollowedText(Integer userid) {
-
+    public List<Text> getFollowedText(Integer userid) {
+        List<Text> followedText = textDao.getFollowedText(userid);
+        return followedText;
     }
 
 

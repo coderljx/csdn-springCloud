@@ -38,8 +38,10 @@
 
 
     <select id="getFollowedText" resultType="Pojo.DB.Text">
-        SELECT *
+        SELECT *,
+               u.name userName
         FROM text t
+                 LEFT JOIN user u on u.id = t.uid
         WHERE t.isdelete = 0
           AND t.uid IN (SELECT follow_id FROM follow WHERE uid = #{userid})
         ORDER BY t.create_date DESC
