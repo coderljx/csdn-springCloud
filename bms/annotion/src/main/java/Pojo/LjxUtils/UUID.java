@@ -10,6 +10,7 @@ public class UUID {
 
     private static ThreadLocal<Properties> threadLocal = new ThreadLocal<>();
 
+
     public static String getUUID() {
         return java.util.UUID.randomUUID().toString().replaceAll("-","");
     }

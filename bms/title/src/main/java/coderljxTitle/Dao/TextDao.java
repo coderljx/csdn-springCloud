@@ -25,6 +25,12 @@ public interface TextDao {
     Integer addUserText(@Param("text") Text text);
 
 
+    /**
+     * 删除用户的文章，软删除
+     * @param id
+     * @param modifyBy
+     * @return
+     */
     Integer deleteUserText(@Param("id")Integer id,
                            @Param("modifyBy")String modifyBy);
 
@@ -33,5 +39,13 @@ public interface TextDao {
      * @return
      */
     List<Advertisement> getAdv(@Param("list") List<Integer> imgId);
+
+
+    /**
+     * 获取用户关注的人发布的文章
+     * @param userid
+     * @return
+     */
+    List<Text> getFollowedText(@Param("userid") Integer userid);
 
 }

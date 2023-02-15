@@ -4,7 +4,7 @@ import Pojo.DB.Coco;
 import Pojo.DB.Response;
 import Pojo.DB.Text;
 import Pojo.DB.User;
-import Pojo.LjxEx.TypeException;
+import Pojo.LjxEx.DataException;
 import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
@@ -41,16 +41,20 @@ public class TextService extends Validate {
         Coco coco = null;
         Response<?> response = null;
         try {
-            if (StringUtils.isEmp(titleStr)) throw new TypeException("titleStr 不可为空");
-            if (StringUtils.isEmp(String.valueOf(textType))) throw new TypeException("textType 不可为空");
-            if (StringUtils.isEmp(String.valueOf(contextLevel))) throw new TypeException("contextLevel 不可为空");
-            if (StringUtils.isEmp(coverTitle)) throw new TypeException("coverTitle 不可为空");
+            if (StringUtils.isEmp(titleStr)) throw new DataException("titleStr 不可为空");
+            if (StringUtils.isEmp(String.valueOf(textType))) throw new DataException("textType 不可为空");
+            if (StringUtils.isEmp(String.valueOf(contextLevel))) throw new DataException("contextLevel 不可为空");
+            if (StringUtils.isEmp(coverTitle)) throw new DataException("coverTitle 不可为空");
 
             validate(appid, userid, sign);
             textMgr.addUserText(detail,userid,coverPhoto,titleStr,textType,releaseForm,contextLevel,file,coverTitle);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -78,6 +82,10 @@ public class TextService extends Validate {
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -87,6 +95,8 @@ public class TextService extends Validate {
         }
         return response;
     }
+
+
 
     @GetMapping("/deleteText/{appid}/{userid}")
     @LogEs(url = "/text/deleteText",dec = "用户删除文章")
@@ -106,6 +116,10 @@ public class TextService extends Validate {
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -115,7 +129,6 @@ public class TextService extends Validate {
         }
         return response;
     }
-
 
 
     @GetMapping("/getAvdText/{appid}/{userid}")
@@ -135,6 +148,43 @@ public class TextService extends Validate {
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        }catch (Exception e){
+            coco = Coco.InitCoco;
+            coco.code = -101;
+            coco.message = e.getMessage();
+        }finally {
+            response = new Response<>(coco);
+        }
+        return response;
+    }
+
+
+    @GetMapping("/getFollowedText/{appid}/{userid}")
+    @LogEs(url = "/text/getFollowedText",dec = "获取关注的人发布的文章")
+    public Response<?> getFollowedText(
+            @PathVariable String appid,
+            @PathVariable Integer userid,
+            @RequestParam(value = "",required = false) String sign
+    ) {
+        Coco coco = null;
+        Response<?> response = null;
+        try {
+            User user = validate(appid, userid, sign);
+
+
+
+
+            coco = Coco.ok;
+        }catch (Pojo.LjxEx.TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;

@@ -5,6 +5,7 @@ package com.codeljxUser.Api;
 import Pojo.DB.Coco;
 import Pojo.DB.Response;
 import Pojo.DB.User;
+import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.UUID;
@@ -46,10 +47,10 @@ public class UserService extends Validate {
 //                case 2 : break;
                 case 3 :
                     if (StringUtils.isEmp(user.getName())){
-                        throw new TypeException("用户名不能为空");
+                        throw new DataException("用户名不能为空");
                     }
                     if (StringUtils.isEmp(user.getPassword())){
-                        throw new TypeException("密码不能为空");
+                        throw new DataException("密码不能为空");
                     }
                     break;
 
@@ -60,6 +61,10 @@ public class UserService extends Validate {
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -87,15 +92,19 @@ public class UserService extends Validate {
             user = JSONObject.parseObject(data, User.class);
 
             if (StringUtils.isEmp(user.getName())){
-                throw new TypeException("用户名不能为空");
+                throw new DataException("用户名不能为空");
             }
             if (StringUtils.isEmp(user.getPassword())){
-                throw new TypeException("密码不能为空");
+                throw new DataException("密码不能为空");
             }
             userMagr.registUser(user);
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -128,6 +137,10 @@ public class UserService extends Validate {
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -163,6 +176,10 @@ public class UserService extends Validate {
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -190,6 +207,10 @@ public class UserService extends Validate {
               coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -218,6 +239,10 @@ public class UserService extends Validate {
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;

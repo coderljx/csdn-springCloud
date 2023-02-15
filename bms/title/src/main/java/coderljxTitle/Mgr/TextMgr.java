@@ -43,13 +43,15 @@ public class TextMgr {
      * @param file         文章中上传的文件
      * @param coverTitle   封面标题
      */
-    public void addUserText(String detail, Integer uid, MultipartFile[] coverPhoto, String titleIdStr, Character textType,
-                            Character releaseForm, Character contextLevel, MultipartFile[] file, String coverTitle)
+    public void addUserText(String detail, Integer uid, MultipartFile[] coverPhoto,
+                            String titleIdStr, Character textType,
+                            Character releaseForm, Character contextLevel,
+                            MultipartFile[] file, String coverTitle)
             throws  ExecutionException, InterruptedException {
         /**
          * 从线程池中拿两个线程分别执行文件保存操作，比之前一个线程运行的要快
          */
-        String coverPhotoStr  = ThreadUtils.invoke(() -> saveFIle(coverPhoto)).get();
+        String coverPhotoStr = ThreadUtils.invoke(() -> saveFIle(coverPhoto)).get();
         String imageStr = ThreadUtils.invoke(() -> saveFIle(file)).get();
         Text text = new Text(detail, uid, coverPhotoStr, titleIdStr, textType, releaseForm, contextLevel, imageStr, coverTitle);
         textDao.addUserText(text);
@@ -80,15 +82,17 @@ public class TextMgr {
                 String contentType = Objects.requireNonNull(
                         multipartFile.getContentType()).substring(0,
                         multipartFile.getContentType().indexOf("application/"));
-                String filePath = fileExport + File.separator + UUID.getUUID() + "." + contentType;
-                str.append(filePath).append(",");
+                String name = UUID.getUUID() + "." + contentType;
+                String filePath = fileExport + File.separator + name;
+                str.append(name).append(",");
                 multipartFile.transferTo(new File(filePath));
             }
         } else {
-            throw new TypeException("上传的文件为空");
+            throw new TypeException("E000005");
         }
         return str.substring(0, str.length() - 1);
     }
+
 
     /**
      * 获取头条，热点，广告等信息
@@ -103,6 +107,16 @@ public class TextMgr {
             System.out.println(item.getFileUrl());
         });
     }
+
+
+    /**
+     * 获得关注的人发布的文章
+     * @param userid
+     */
+    public void getFollowedText(Integer userid) {
+
+    }
+
 
 
 }

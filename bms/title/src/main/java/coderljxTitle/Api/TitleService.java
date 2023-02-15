@@ -4,6 +4,7 @@ import Pojo.DB.Coco;
 import Pojo.DB.Response;
 import Pojo.DB.Title;
 import Pojo.DB.User;
+import Pojo.LjxEx.DataException;
 import Pojo.LjxUtils.FileUtils;
 import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
@@ -34,6 +35,10 @@ public class TitleService extends Validate {
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -63,6 +68,10 @@ public class TitleService extends Validate {
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
