@@ -49,7 +49,7 @@ public class LogEsImpl {
         Method method = methodSignature.getMethod();
         LogEs annotation = method.getAnnotation(LogEs.class);
         JSONObject of = JSONObject.of("url", annotation.url(), "dec", annotation.dec(), "params", Arrays.toString(args), "resparams", result);
-        Connection.httpPost(of);
+//        Connection.httpPost(of);
     }
 
 

@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class ModuleMgr {
+public class ClassMgr {
 
     @Resource
     private ModuleDao moduleDao;
@@ -21,6 +21,11 @@ public class ModuleMgr {
 
     public void addModules(Module modules,String createBy) {
         moduleDao.addModule(modules,createBy);
+    }
+
+
+    public void delModules(Integer id,String modifyBy) {
+        moduleDao.delModule(id,modifyBy);
     }
 
 

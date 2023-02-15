@@ -13,4 +13,8 @@ public interface ModuleDao {
 
     Integer addModule(@Param("module") Module module,
                       @Param("createBy") String createBy);
+
+
+    Integer delModule(@Param("id") Integer id,
+                      @Param("modifyBy") String modifyBy);
 }

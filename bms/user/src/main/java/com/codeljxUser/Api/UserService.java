@@ -51,6 +51,9 @@ public class UserService extends Validate {
                         throw new TypeException("密码不能为空");
                     }
                     break;
+
+                default:
+                    break;
             }
             user = userMagr.loginUser(user, status);
             coco = Coco.ok;

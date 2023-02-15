@@ -2,15 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="coderljxTitle.Dao.ModuleDao">
     <insert id="addModule">
-        INSERT INTO module(moduleName,create_time,create_by)
-        VALUES(#{module.moduleName}, NOW(),#{createBy})
+        INSERT INTO module(moduleName, create_time, create_by)
+        VALUES (#{module.moduleName}, NOW(), #{createBy})
     </insert>
 
 
-    <select id="queryModule" resultType="Pojo.DB.Module">
-        SELECT * FROM module WHERE is_delete = 0
-    </select>
+    <update id="delModule">
+        update module
+        set is_delete   = 1,
+            modify_date = now(),
+            modify_by   = #{modifyBy}
+        where id = #{id}
+    </update>
 
+
+    <select id="queryModule" resultType="Pojo.DB.Module">
+        SELECT *
+        FROM module
+        WHERE is_delete = 0
+    </select>
 
 
 </mapper>
