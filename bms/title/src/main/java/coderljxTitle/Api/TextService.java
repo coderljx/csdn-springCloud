@@ -41,10 +41,18 @@ public class TextService extends Validate {
         Coco coco = null;
         Response<?> response = null;
         try {
-            if (StringUtils.isEmp(titleStr)) throw new DataException("titleStr 不可为空");
-            if (StringUtils.isEmp(String.valueOf(textType))) throw new DataException("textType 不可为空");
-            if (StringUtils.isEmp(String.valueOf(contextLevel))) throw new DataException("contextLevel 不可为空");
-            if (StringUtils.isEmp(coverTitle)) throw new DataException("coverTitle 不可为空");
+            if (StringUtils.isEmp(titleStr)) {
+                throw new DataException("titleStr 不可为空");
+            }
+            if (StringUtils.isEmp(String.valueOf(textType))) {
+                throw new DataException("textType 不可为空");
+            }
+            if (StringUtils.isEmp(String.valueOf(contextLevel))) {
+                throw new DataException("contextLevel 不可为空");
+            }
+            if (StringUtils.isEmp(coverTitle)) {
+                throw new DataException("coverTitle 不可为空");
+            }
 
             validate(appid, userid, sign);
             textMgr.addUserText(detail,userid,coverPhoto,titleStr,textType,releaseForm,contextLevel,file,coverTitle);
