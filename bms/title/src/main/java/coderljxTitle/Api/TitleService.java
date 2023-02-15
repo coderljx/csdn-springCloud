@@ -5,6 +5,7 @@ import Pojo.DB.Response;
 import Pojo.DB.Title;
 import Pojo.DB.User;
 import Pojo.LjxUtils.FileUtils;
+import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
 import com.alibaba.fastjson2.JSONObject;
 import com.codeljxUser.Validate;
@@ -32,9 +33,7 @@ public class TitleService extends Validate {
 
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -63,9 +62,7 @@ public class TitleService extends Validate {
 
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;

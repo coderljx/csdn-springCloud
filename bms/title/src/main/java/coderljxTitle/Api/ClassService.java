@@ -6,6 +6,7 @@ import Pojo.DB.Response;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.MapUtils;
+import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.ClassMgr;
 import com.codeljxUser.Validate;
@@ -42,9 +43,7 @@ public class ClassService extends Validate {
             data = moduleMgr.queryModule();
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception message) {
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -73,9 +72,7 @@ public class ClassService extends Validate {
             moduleMgr.addModules(module, user.getName());
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -103,14 +100,12 @@ public class ClassService extends Validate {
 //            User user = validate(appid, userid, sign, data);
 
             if (id == null || id <= 0){
-                throw new TypeException("id 不能为空");
+                throw new TypeException("E000003");
             }
 
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;

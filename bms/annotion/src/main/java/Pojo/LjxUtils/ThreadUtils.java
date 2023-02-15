@@ -29,17 +29,8 @@ public class ThreadUtils {
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
 
-        Future<String> invoke = ThreadUtils.invoke(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                System.out.println(Thread.currentThread().getName());
-                Thread.sleep(3000);
-                return "ok";
-            }
-        });
-        System.out.println(invoke.get());
     }
 
 }

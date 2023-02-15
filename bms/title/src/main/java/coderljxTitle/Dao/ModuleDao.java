@@ -17,4 +17,12 @@ public interface ModuleDao {
 
     Integer delModule(@Param("id") Integer id,
                       @Param("modifyBy") String modifyBy);
+
+    /**
+     * 根据名字查询模块模块
+     * @param moduleName
+     * @return
+     */
+    Module queryModuleByName(@Param("moduleName") String moduleName);
+
 }

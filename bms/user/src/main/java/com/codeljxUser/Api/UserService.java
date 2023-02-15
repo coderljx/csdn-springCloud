@@ -7,6 +7,7 @@ import Pojo.DB.Response;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.StringUtils;
+import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
 import com.alibaba.fastjson2.JSONObject;
 import com.codeljxUser.Validate;
@@ -58,9 +59,7 @@ public class UserService extends Validate {
             user = userMagr.loginUser(user, status);
             coco = Coco.ok;
         }catch (TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -96,9 +95,7 @@ public class UserService extends Validate {
             userMagr.registUser(user);
             coco = Coco.ok;
         }catch (TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -126,13 +123,11 @@ public class UserService extends Validate {
             user = JSONObject.parseObject(data, User.class);
 
             if (StringUtils.isEmp(user.getName())){
-                throw new TypeException("用户名不能为空");
+                throw new TypeException("E000001_06");
             }
             coco = Coco.ok;
         }catch (TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -157,15 +152,17 @@ public class UserService extends Validate {
         try {
             User validate = validate(appid, userid,sign);
 
-            if (StringUtils.isEmp(userid + "")) throw new TypeException("userid不能为空");
-            if (StringUtils.isEmp(roleid + "")) throw new TypeException("roleid不能为空");
+            if (StringUtils.isEmp(userid + "")) {
+                throw new TypeException("E000001_02");
+            }
+            if (StringUtils.isEmp(roleid + "")) {
+                throw new TypeException("E000001_03");
+            }
 
             userMagr.setUserRole(roleid,validate.getName());
             coco = Coco.ok;
         }catch (TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -192,9 +189,7 @@ public class UserService extends Validate {
               user = userMagr.getUser();
               coco = Coco.ok;
         }catch (TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -217,14 +212,12 @@ public class UserService extends Validate {
         Response<?> response = null;
         try {
             User validate = validate(appid, userid,sign);
-            if (validate == null) throw new TypeException("该用户不存在或已停用");
+            if (validate == null) throw new TypeException("E000001_01");
             userMagr.deleteUser(userid,validate.getName());
 
             coco = Coco.ok;
         }catch (TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;

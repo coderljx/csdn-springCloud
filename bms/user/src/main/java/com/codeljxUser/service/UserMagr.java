@@ -46,11 +46,11 @@ public class UserMagr {
         User user1 = null;
         if (status == 1) {
             user1 = userDao.queryUserFormPhone(user);
-            if (user1 == null || user1.getName().equals("")) throw new TypeException("用户手机号不存在");
+            if (user1 == null || user1.getName().equals("")) throw new TypeException("E000001_04");
         }
         if (status == 3) {
             user1 = userDao.queryUserFormPwd(user);
-            if (user1 == null || user1.getName().equals("")) throw new TypeException("用户密码错误");
+            if (user1 == null || user1.getName().equals("")) throw new TypeException("E000001_05");
         }
         String uuid = UUID.getUUID();
         string.setString(user1.getId() + "",uuid);

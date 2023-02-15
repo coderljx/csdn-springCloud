@@ -6,6 +6,7 @@ import Pojo.DB.Text;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.StringUtils;
+import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.TextMgr;
 import com.codeljxUser.Validate;
@@ -49,9 +50,7 @@ public class TextService extends Validate {
             textMgr.addUserText(detail,userid,coverPhoto,titleStr,textType,releaseForm,contextLevel,file,coverTitle);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -78,9 +77,7 @@ public class TextService extends Validate {
             textList = textMgr.getUserText(userid);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -108,9 +105,7 @@ public class TextService extends Validate {
 
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;
@@ -139,9 +134,7 @@ public class TextService extends Validate {
             textMgr.getAvdText();
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
-            coco = Coco.InitCoco;
-            coco.code = -100;
-            coco.message = message.getMessage();
+            coco = UUID.ExceptionFill(message);
         }catch (Exception e){
             coco = Coco.InitCoco;
             coco.code = -101;

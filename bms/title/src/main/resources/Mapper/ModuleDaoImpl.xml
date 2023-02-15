@@ -23,4 +23,11 @@
     </select>
 
 
+    <select id="queryModuleByName" resultType="Pojo.DB.Module">
+        SELECT *
+        FROM module
+        WHERE is_delete = 0 AND moduleName = #{moduleName}
+    </select>
+
+
 </mapper>
