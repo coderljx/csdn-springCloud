@@ -4,6 +4,7 @@ import Pojo.DB.Coco;
 import Pojo.LjxEx.TypeException;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class UUID {
@@ -41,8 +42,9 @@ public class UUID {
         }
         InputStream resourceAsStream = UUID.class.getResourceAsStream(name);
         try {
+            assert resourceAsStream != null;
             BufferedReader inputStream = new BufferedReader(
-                    new InputStreamReader(resourceAsStream, "UTF-8"));
+                    new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8));
             Properties properties = new Properties();
             properties.load(inputStream);
             // 一般出错了都是主线程去执行，所以只需要主线程初始化一次，下次就不需要读文件了
