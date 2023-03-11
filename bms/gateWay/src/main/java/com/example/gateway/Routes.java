@@ -19,10 +19,10 @@ public class Routes {
         return builder.routes()
                 .route("userService", per ->
                         per.path("/userService/**")
-                                .uri("lb://userService"))
+                                .uri("http://localhost:9001"))
                 .route( per ->
                         per.path("/titleService/**")
-                                .uri("lb://titleService"))
+                                .uri("http://localhost:9002"))
                 .build();
     }
 
@@ -34,6 +34,7 @@ public class Routes {
 //        ServiceInstance serviceInstance = instances.get(0);
 //        return serviceInstance.getUri().toString();
 //    }
+//                                .uri("lb://userService"))
 
 
 }

@@ -1,0 +1,9 @@
+server:
+  port: 80
+spring:
+  cloud:
+    nacos:
+      server-addr: 192.168.0.101:8848
+  application:
+    name: gateWay
+

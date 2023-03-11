@@ -49,7 +49,7 @@ public class Connection {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         // *创建HttpPost
         //        "http://localhost:5400/es/create"
-        HttpPost httppost = new HttpPost("http://192.168.0.109:5400/es/create");
+        HttpPost httppost = new HttpPost("http://192.168.0.101:5400/es/create");
         // *创建参数队列
         UrlEncodedFormEntity uefEntity;
         try {

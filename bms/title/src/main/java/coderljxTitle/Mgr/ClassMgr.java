@@ -21,6 +21,11 @@ public class ClassMgr {
     }
 
 
+    /**
+     * 新增一个系统模块
+     * @param modules
+     * @param createBy
+     */
     public void addModules(Module modules,String createBy) {
         if (StringUtils.isEmp(modules.getModuleName())){
             throw new TypeException("E000002");
@@ -33,9 +38,15 @@ public class ClassMgr {
     }
 
 
+    /**
+     * 删除一个系统模块
+     * @param id
+     * @param modifyBy
+     */
     public void delModules(Integer id,String modifyBy) {
         moduleDao.delModule(id,modifyBy);
     }
+
 
 
 }

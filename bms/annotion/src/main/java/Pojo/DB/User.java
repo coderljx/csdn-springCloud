@@ -1,5 +1,6 @@
 package Pojo.DB;
 
+import Pojo.SearchArgsMap;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,4 +13,6 @@ public class User extends Base {
     private String address;
     private String password;
     private Integer roleid;
+
+    private SearchArgsMap searchArgsMap;
 }

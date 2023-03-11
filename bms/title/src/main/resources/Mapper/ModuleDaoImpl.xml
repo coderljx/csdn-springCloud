@@ -17,7 +17,7 @@
 
 
     <select id="queryModule" resultType="Pojo.DB.Module">
-        SELECT *
+        SELECT id,moduleName
         FROM module
         WHERE is_delete = 0
     </select>

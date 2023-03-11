@@ -1,24 +1,17 @@
 package LjxRedis;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 class RedisTemplate {
 
-    private final org.springframework.data.redis.core.RedisTemplate<String, Object> redisTemplate;
+    private JedisPool jedisPool;
 
-    public RedisTemplate(org.springframework.data.redis.core.RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    public RedisTemplate(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
     }
 
-    public org.springframework.data.redis.core.RedisTemplate<String, Object> getRedisTemplate() {
-        return this.redisTemplate;
+    Jedis getJedis() {
+        return jedisPool.getResource();
     }
-
-    public Boolean deleteKey(String key) {
-        return redisTemplate.delete(key);
-    }
-
-    public Boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
-    }
-
-
 }

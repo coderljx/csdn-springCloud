@@ -11,20 +11,48 @@
     </update>
 
     <update id="deleteUser">
-        update user set is_delete = 1, modyfy_time = now(), modyfiBy = #{modyfiBy}
-                        where id = #{userid}
+        update user
+        set is_delete   = 1,
+            modyfy_time = now(),
+            modyfiBy    = #{modyfiBy}
+        where id = #{userid}
     </update>
+    <delete id="unFollowUser">
+        delete follow where user_id = #{userId} and follow_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
 
     <insert id="insertUser">
-       insert  into user (name,phone,address,password,create_time)
-       value (#{user.name},#{user.phone},#{user.address},#{user.password},now())
+        insert into user (name, phone, address, password, create_time)
+            value (#{user.name},#{user.phone},#{user.address},#{user.password},now())
+    </insert>
+
+    <insert id="followUser">
+        insert into follow(user_id, follow_id, crete_time, create_by)
+        values (#{userId}, #{followId}, now(), #{modyfiBy})
     </insert>
 
     <select id="queryUserFormPwd" resultType="Pojo.DB.User">
-        select id,name,phone from user where password = #{user.password} and name = #{user.name} and is_delete = 0
+        select id, name, phone
+        from user
+        where password = #{user.password}
+          and name = #{user.name}
+          and is_delete = 0
     </select>
     <select id="queryUserFormPhone" resultType="Pojo.DB.User">
-        select id,name,phone from user where phone = #{user.phone} and is_delete = 0
+        select id, name, phone
+        from user
+        where phone = #{user.phone}
+          and is_delete = 0
+    </select>
+
+    <select id="queryFollow" resultType="Pojo.DB.Follow">
+        SELECT id, user_id, follow_id, create_time
+        FROM `follow`
+        WHERE user_id = #{userid}
+          and follow_id = #{followId}
     </select>
 
 </mapper>

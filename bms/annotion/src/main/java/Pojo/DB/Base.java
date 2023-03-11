@@ -9,8 +9,8 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Base {
     private Integer id;
-    private Date create_time;
-    private String create_by;
-    private Date modify_time;
-    private String modify_by;
+    private Date createTime;
+    private String createBy;
+    private Date modifyTime;
+    private String modifyBy;
 }

@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 @SpringBootApplication(scanBasePackages = {"com"})
 @MapperScan("com.codeljxUser.Dao")
@@ -22,5 +24,18 @@ public class UserApplication {
     @Bean
     public IClientConfig iClientConfig() {
         return new DefaultClientConfigImpl();
+    }
+
+
+
+    @Bean
+    public JedisPool getJedisPool() {
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        // 最大连接数
+        jedisPoolConfig.setMaxTotal(100);
+
+
+        JedisPool jPool = new JedisPool(jedisPoolConfig, "172.31.31.129", 6379);
+        return jPool;
     }
 }

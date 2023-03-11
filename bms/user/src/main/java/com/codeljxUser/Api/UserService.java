@@ -69,6 +69,7 @@ public class UserService extends Validate {
             coco = Coco.InitCoco;
             coco.code = -101;
             coco.message = e.getMessage();
+            e.printStackTrace();
         }finally {
             response = new Response<>(coco,user);
         }
@@ -233,7 +234,6 @@ public class UserService extends Validate {
         Response<?> response = null;
         try {
             User validate = validate(appid, userid,sign);
-            if (validate == null) throw new TypeException("E000001_01");
             userMagr.deleteUser(userid,validate.getName());
 
             coco = Coco.ok;
@@ -254,14 +254,71 @@ public class UserService extends Validate {
     }
 
 
-    @GetMapping("/a")
-    public Response<?> asdsa(
+    @PostMapping("/follow/{appid}")
+    @LogEs(url = "/user/follow",dec = "关注用户")
+    public Response<?> followUser(
+            @PathVariable String appid,
+            @RequestParam(value = "userid",required = false) Integer userid,
+            @RequestParam(value = "",required = false) String sign,
+            @RequestBody String data
     ){
+        Coco coco = null;
+        Response<?> response = null;
+        try {
+            User validate = validate(appid, userid,sign);
 
-        return new Response<>();
+            userMagr.followUser(validate);
+
+            coco = Coco.ok;
+        }catch (TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        }catch (Exception e){
+            coco = Coco.InitCoco;
+            coco.code = -101;
+            coco.message = e.getMessage();
+        }finally {
+            response = new Response<>(coco);
+        }
+        return response;
     }
 
 
+
+    @PostMapping("/unfollow/{appid}")
+    @LogEs(url = "/user/unfollow",dec = "关注用户")
+    public Response<?> unFollowUser(
+            @PathVariable String appid,
+            @RequestParam(value = "userid",required = false) Integer userid,
+            @RequestParam(value = "",required = false) String sign,
+            @RequestBody String data
+    ){
+        Coco coco = null;
+        Response<?> response = null;
+        try {
+            User validate = validate(appid, userid,sign);
+
+            userMagr.unFollowUser(validate);
+
+            coco = Coco.ok;
+        }catch (TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        }catch (Exception e){
+            coco = Coco.InitCoco;
+            coco.code = -101;
+            coco.message = e.getMessage();
+        }finally {
+            response = new Response<>(coco);
+        }
+        return response;
+    }
 
 
 

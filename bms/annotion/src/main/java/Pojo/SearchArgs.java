@@ -32,7 +32,6 @@ public class SearchArgs {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ArgsItem {
-        private String type;
         private List<Condition> children;
     }
 

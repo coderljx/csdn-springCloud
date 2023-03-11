@@ -167,6 +167,8 @@ public class TextService extends Validate {
         }finally {
             response = new Response<>(coco);
         }
+
+
         return response;
     }
 

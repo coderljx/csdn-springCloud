@@ -1,17 +1,17 @@
 package com.codeljxUser.service;
 
 
+import LjxRedis.RedisString;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.UUID;
-import LjxRedis.RedisHash;
-import LjxRedis.RedisString;
+import Pojo.SearchArgs;
 import com.codeljxUser.Dao.UserDao;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserMagr {
@@ -19,19 +19,7 @@ public class UserMagr {
     @Resource
     private RedisString string;
     @Resource
-    private RedisHash hash;
-    @Resource
     private UserDao userDao;
-
-
-    public void test() {
-        hash.hasKey("");
-        Map<Object, Object> tt = hash.getHash("tt");
-        String uuid = UUID.getUUID();
-
-        System.out.println(tt.size());
-    }
-
 
     public void registUser(User user) {
         userDao.insertUser(user);
@@ -85,6 +73,31 @@ public class UserMagr {
      */
     public void deleteUser(Integer userid,String modify){
         userDao.deleteUser(userid,modify);
+    }
+
+
+    /**
+     * 关注用户接口，只支持单个操作
+     * @param user
+     */
+    public void followUser(User user) {
+        List<SearchArgs.Condition> children = user.getSearchArgsMap().getArgsItem().getChildren();
+        SearchArgs.Condition condition = children.get(0);
+        userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()),user.getName());
+    }
+
+
+    /**
+     * 取关用户,支持批量取关
+     * @param user
+     */
+    public void unFollowUser(User user) {
+        List<SearchArgs.Condition> children = user.getSearchArgsMap().getArgsItem().getChildren();
+        List<String> followList = new ArrayList<>();
+        for (SearchArgs.Condition child : children) {
+            followList.add(child.getValue());
+        }
+        userDao.unFollowUser(user.getId(),followList);
     }
 
 

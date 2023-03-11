@@ -1,24 +1,19 @@
 package LjxRedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
-import java.time.Duration;
-
-@Repository
+@Service
 public class RedisString extends LjxRedis.RedisTemplate {
 
-    private ValueOperations<String, Object> stringObjectValueOperations;
+    private final Jedis jedis;
 
     @Autowired
-    public RedisString(RedisTemplate<String, Object> redisTemplate) {
-        super(redisTemplate);
-        stringObjectValueOperations = super.getRedisTemplate().opsForValue();
-
-//        LettuceConnectionFactory connectionFactory = (LettuceConnectionFactory) redisTemplate.getConnectionFactory();
+    public RedisString(JedisPool jedisPool) {
+        super(jedisPool);
+        this.jedis = super.getJedis();
     }
 
     /**
@@ -27,18 +22,38 @@ public class RedisString extends LjxRedis.RedisTemplate {
      * @param value
      */
     public void setString(String key, String value) {
-        stringObjectValueOperations.set(key,value);
+        jedis.set(key,value);
     }
 
 
-    public void setString(String key, String value,long time) {
-        stringObjectValueOperations.set(key,value, Duration.ofMinutes(time));
+    /**
+     * 设置key的过期时间
+     * @param key
+     * @param value
+     * @param time
+     */
+    public void setString(String key, String value,int time) {
+        jedis.set(key,value);
+        setExpire(key,time);
     }
 
+    /**
+     * 获取一个key
+     * @param key
+     * @return
+     */
     public Object getKey(String key) {
-        return stringObjectValueOperations.get(key);
+        return jedis.get(key);
     }
 
+    /**
+     *
+     * @param key 需要设置的key
+     * @param time 毫秒格式 1000 = 1s
+     */
+    public void setExpire(String key,int time){
+        jedis.expire(key,time);
+    }
 
 
 }

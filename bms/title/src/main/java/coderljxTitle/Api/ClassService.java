@@ -38,8 +38,7 @@ public class ClassService extends Validate {
         Response<?> response = null;
         List<Module> data = null;
         try {
-//            validate(appid,userid,sign);
-
+            validate(appid,sign);
 
             data = moduleMgr.queryModule();
             coco = Coco.ok;
@@ -93,25 +92,24 @@ public class ClassService extends Validate {
     }
 
 
-
-
-    @GetMapping("/delModules/{appid}/{userid}")
+    @GetMapping("/delModules/{appid}")
     @LogEs(url = "/class/delModules",dec = "删除系统模块")
     public Response<?> delModules(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) String sign,
             @RequestParam(value = "id",required = false) Integer id
     ){
         Coco coco = null;
         Response<?> response = null;
         try {
-//            User user = validate(appid, userid, sign, data);
+            User user = validate(appid, userid, sign);
 
             if (id == null || id <= 0){
                 throw new TypeException("E000003");
             }
 
+            moduleMgr.delModules(userid,user.getName());
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
@@ -130,6 +128,36 @@ public class ClassService extends Validate {
     }
 
 
+
+    @GetMapping("/getLinks/{appid}")
+    @LogEs(url = "/class/getLinks",dec = "获取广告的图片链接")
+    public Response<?> getLinks(
+            @PathVariable String appid,
+            @RequestParam(value = "",required = false) String sign
+    ){
+        Coco coco = null;
+        Response<?> response = null;
+        try {
+            validate(appid, sign);
+
+
+
+            coco = Coco.ok;
+        }catch (Pojo.LjxEx.TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        }catch (Exception e){
+            coco = Coco.InitCoco;
+            coco.code = -101;
+            coco.message = e.getMessage();
+        }finally {
+            response = new Response<>(coco);
+        }
+        return response;
+    }
 
 
 }

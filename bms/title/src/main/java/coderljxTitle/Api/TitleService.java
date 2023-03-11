@@ -19,11 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("title")
 public class TitleService extends Validate {
 
-    @GetMapping("/getTitle/{appid}/{userid}")
+    @GetMapping("/getTitle/{appid}")
     @LogEs(url = "/title/getTitle",dec = "获取模块下的标签")
     public Response<?> getTitle(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) String sign,
             @RequestParam(value = "id",required = false) Integer moduleID
     ){
@@ -82,11 +82,12 @@ public class TitleService extends Validate {
         return response;
     }
 
+
+
     @GetMapping("/viewImg/{url}")
     @LogEs(url = "/title/viewImg",dec = "查看图片")
     public void viewImg(
             @PathVariable("url") String url,
-            @RequestParam(value = "",required = false) String sign,
             HttpServletResponse httpServletResponse
     ){
         try {
