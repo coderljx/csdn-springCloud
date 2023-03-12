@@ -34,7 +34,7 @@ public class SearchArgsMap {
     }
 
     public SearchArgsMap(String data) throws NoSuchFieldException, IllegalAccessException {
-        if (StringUtils.isEmp(data)) throw new TypeException("data 不能为空");
+        if (StringUtils.isEmp(data)) return;
 
         Map map = JSONObject.parseObject(data, Map.class);
         this.filters = (Map<String, Object>) map.get("payload");
@@ -50,20 +50,23 @@ public class SearchArgsMap {
      */
     @SuppressWarnings("unchecked")
     public void MapTpArgsItem() throws NoSuchFieldException, IllegalAccessException {
-        if (this.filters == null) throw new TypeException("filters 不能为空");
+        if (this.filters == null) throw new TypeException("E000001_07");
 
         Map<String, Object> filters = this.getFilters();
         if (filters.get("rules") != null) {
             List<Map<String, Object>> rules = (List<Map<String, Object>>) filters.get("rules");
-            if (rules.size() == 0) return;
-
-            List<Map<String, Object>> solr = new ArrayList<>();
-            // 简版搜索
-            solr.addAll(rules);
-            if (solr.size() != 0) {
-                argsItem.setChildren(this.GetConditionFormMaps(solr));
+            if (rules.size() != 0) {
+                List<Map<String, Object>> solr = new ArrayList<>();
+                // 简版搜索
+                solr.addAll(rules);
+                if (solr.size() != 0) {
+                    argsItem.setChildren(this.GetConditionFormMaps(solr));
+                }
             }
         }
+        this.setPer_page(filters.get("per_page") == null ? 1 : (Integer) this.getFilters().get("per_page"));
+        this.setCurr_page(filters.get("curr_page") == null ? 15 : (Integer) this.getFilters().get("curr_page"));
+        this.setSearch((String) filters.get("search"));
     }
 
     /**

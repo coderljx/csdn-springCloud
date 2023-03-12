@@ -14,4 +14,5 @@ class RedisTemplate {
     Jedis getJedis() {
         return jedisPool.getResource();
     }
+
 }

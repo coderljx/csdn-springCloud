@@ -54,5 +54,8 @@ public class Validate {
     }
 
 
+    public void validate(String appid) throws NoSuchFieldException, IllegalAccessException {
+    }
+
 
 }

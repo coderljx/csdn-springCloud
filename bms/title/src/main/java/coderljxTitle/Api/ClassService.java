@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,14 +32,13 @@ public class ClassService extends Validate {
     @LogEs(url = "/class/get",dec = "获取当前所有模块")
     public Response<?> getModules(
             @PathVariable String appid,
-            @RequestParam(value = "userid",required = false) Integer userid,
-            @RequestParam(value = "",required = false) String sign
+            @RequestParam(value = "userid",required = false) Integer userid
     ){
         Coco coco = null;
         Response<?> response = null;
         List<Module> data = null;
         try {
-            validate(appid,sign);
+            validate(appid);
 
             data = moduleMgr.queryModule();
             coco = Coco.ok;
@@ -137,10 +137,10 @@ public class ClassService extends Validate {
     ){
         Coco coco = null;
         Response<?> response = null;
+        List<String> res = new ArrayList<>();
         try {
             validate(appid, sign);
-
-
+            res = moduleMgr.getLinks();
 
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
@@ -154,7 +154,7 @@ public class ClassService extends Validate {
             coco.code = -101;
             coco.message = e.getMessage();
         }finally {
-            response = new Response<>(coco);
+            response = new Response<>(coco,res);
         }
         return response;
     }

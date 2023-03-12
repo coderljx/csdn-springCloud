@@ -1,18 +1,15 @@
-package example;
+package Activities;
 
-
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication(scanBasePackages = "example")
+@SpringBootApplication(scanBasePackages = "Activities")
 @EnableDiscoveryClient
-public class EsDB {
-
+@MapperScan({"Activities.Dao","com.codeljxUser.Dao"})
+public class Activities {
     public static void main(String[] args) {
-        SpringApplication.run(EsDB.class, args);
+        SpringApplication.run(Activities.class,args);
     }
-
-
-
 }

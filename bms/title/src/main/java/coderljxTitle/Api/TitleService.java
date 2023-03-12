@@ -10,6 +10,7 @@ import Pojo.LjxUtils.UUID;
 import an.Log.LogEs;
 import com.alibaba.fastjson2.JSONObject;
 import com.codeljxUser.Validate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("title")
 public class TitleService extends Validate {
+
+    @Value("${fileImg}")
+    private String imgUrl;
 
     @GetMapping("/getTitle/{appid}")
     @LogEs(url = "/title/getTitle",dec = "获取模块下的标签")
@@ -94,9 +98,8 @@ public class TitleService extends Validate {
             System.out.println(url);
 //            httpServletResponse.setHeader("Content-Type","application/x-img");
             ServletOutputStream outputStream = httpServletResponse.getOutputStream();
-            byte[] bytes = FileUtils.readFile("C:" + url);
+            byte[] bytes = FileUtils.readFile(imgUrl + url);
             outputStream.write(bytes);
-
         }catch (Pojo.LjxEx.TypeException message) {
         }catch (Exception e){
         }

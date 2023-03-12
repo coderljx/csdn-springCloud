@@ -139,11 +139,11 @@ public class TextService extends Validate {
     }
 
 
-    @GetMapping("/getAvdText/{appid}/{userid}")
+    @GetMapping("/getAvdText/{appid}")
     @LogEs(url = "/text/getAvdText",dec = "获取头条，热点，广告等信息")
     public Response<?> getAvdText(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) String sign,
             @RequestParam(value = "id",required = false) Integer id
     ){
@@ -173,18 +173,18 @@ public class TextService extends Validate {
     }
 
 
-    @GetMapping("/getFollowedText/{appid}/{userid}")
+    @GetMapping("/getFollowedText/{appid}")
     @LogEs(url = "/text/getFollowedText",dec = "获取关注的人发布的文章")
     public Response<?> getFollowedText(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) String sign
     ) {
         Coco coco = null;
         Response<?> response = null;
         List<Text> followedText = null;
         try {
-//            User user = validate(appid, userid, sign);
+            User user = validate(appid, userid, sign);
 
             followedText = textMgr.getFollowedText(userid);
             coco = Coco.ok;

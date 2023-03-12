@@ -10,15 +10,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="reids" />
         <module name="esDB" />
+        <module name="annotion" />
+        <module name="activities" />
         <module name="title" />
         <module name="user" />
-        <module name="annotion" />
         <module name="gateWay" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="activities" options="-parameters" />
       <module name="annotion" options="-parameters" />
       <module name="bms" options="-parameters" />
       <module name="esDB" options="-parameters" />
