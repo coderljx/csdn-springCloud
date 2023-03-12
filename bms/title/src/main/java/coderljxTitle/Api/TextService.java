@@ -7,9 +7,9 @@ import Pojo.DB.User;
 import Pojo.LjxEx.DataException;
 import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.UUID;
+import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.TextMgr;
-import com.codeljxUser.Validate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

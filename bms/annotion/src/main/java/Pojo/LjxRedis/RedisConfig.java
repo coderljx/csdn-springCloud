@@ -1,4 +1,4 @@
-package LjxRedis;
+package Pojo.LjxRedis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

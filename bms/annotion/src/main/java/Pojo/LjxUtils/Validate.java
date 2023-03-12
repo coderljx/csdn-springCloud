@@ -1,23 +1,13 @@
-package com.codeljxUser;
+package Pojo.LjxUtils;
 
 
-import LjxRedis.RedisString;
 import Pojo.DB.User;
-import Pojo.LjxEx.TypeException;
-import Pojo.LjxUtils.StringUtils;
 import Pojo.SearchArgsMap;
-import com.codeljxUser.Dao.UserDao;
-
-import javax.annotation.Resource;
 
 public class Validate {
 
-    @Resource
-    private UserDao userDao;
-    @Resource
-    private RedisString redisString;
 
-    public Boolean validate(String appid, String appkey, String sign,  String data) throws NoSuchFieldException, IllegalAccessException {
+    public Boolean validate(String appid, String appkey, String sign,  String data) {
 
         return true;
     }
@@ -31,11 +21,9 @@ public class Validate {
 
     public User validate(String appid, Integer userid,String data) throws NoSuchFieldException, IllegalAccessException{
 
-        String key = (String) redisString.getKey(userid + "");
-        if (StringUtils.isEmp(key)) throw new TypeException("E000001_01");
-        User user = userDao.querUserById(userid);
-        SearchArgsMap searchArgsMap = parseData(data);
-        user.setSearchArgsMap(searchArgsMap);
+        User user = new User();
+        user.setId(userid);
+        user.setSearchArgsMap(this.parseData(data));
         return user;
     }
 

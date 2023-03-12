@@ -1,13 +1,16 @@
 package coderljxTitle.Mgr;
 
 import Pojo.DB.Module;
+import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.StringUtils;
 import coderljxTitle.Dao.AdvertiDao;
 import coderljxTitle.Dao.ModuleDao;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
@@ -22,6 +25,8 @@ public class ClassMgr {
     private AdvertiDao advertiDao;
     @Resource
     private DiscoveryClient discoveryClient;
+    @Resource
+    private RestTemplate restTemplate;
 
 
     public List<Module> queryModule(){
@@ -32,9 +37,8 @@ public class ClassMgr {
     /**
      * 新增一个系统模块
      * @param modules
-     * @param createBy
      */
-    public void addModules(Module modules,String createBy) {
+    public void addModules(Module modules, User user,String appid) {
         if (StringUtils.isEmp(modules.getModuleName())){
             throw new TypeException("E000002");
         }
@@ -42,7 +46,11 @@ public class ClassMgr {
         if (module != null && StringUtils.isEmp(module.getModuleName())) {
             throw new TypeException("E000004");
         }
-        moduleDao.addModule(modules,createBy);
+        ResponseEntity<String> forEntity = restTemplate.getForEntity("http://userService/api/user/getUserStatus/" + appid + "?userid=" + user.getId(), String.class);
+        if (!StringUtils.isEmp(forEntity.getBody())) {
+            throw new TypeException("E000001_01");
+        }
+        moduleDao.addModule(modules,user.getName());
     }
 
 

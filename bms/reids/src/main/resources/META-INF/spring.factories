@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-LjxRedis.RedisString,\
-LjxRedis.RedisTemplate,\
-LjxRedis.RedisConfig

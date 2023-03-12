@@ -6,7 +6,7 @@
         SELECT id,
                activities_name activitiesName,
                to_char(create_time, 'YYYY-MM-DD') createTime
-        FROM activities LIMIT 1;
+        FROM activities LIMIT #{limit} OFFSET #{offset};
     </select>
 
 

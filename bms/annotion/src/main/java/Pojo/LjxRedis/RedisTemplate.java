@@ -1,4 +1,4 @@
-package LjxRedis;
+package Pojo.LjxRedis;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

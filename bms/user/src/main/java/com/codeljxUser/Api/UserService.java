@@ -9,9 +9,9 @@ import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.UUID;
+import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import com.alibaba.fastjson2.JSONObject;
-import com.codeljxUser.Validate;
 import com.codeljxUser.service.UserMagr;
 import org.springframework.web.bind.annotation.*;
 
@@ -157,7 +157,7 @@ public class UserService extends Validate {
     @LogEs(url = "/user/role",dec = "设置用户权限")
     public Response<?> roleUser(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) Integer roleid,
             @RequestParam(value = "",required = false) String sign
     ){
@@ -173,7 +173,7 @@ public class UserService extends Validate {
                 throw new TypeException("E000001_03");
             }
 
-            userMagr.setUserRole(roleid,validate.getName());
+            userMagr.setUserRole(roleid,userid);
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
@@ -192,18 +192,17 @@ public class UserService extends Validate {
     }
 
 
-    @GetMapping("/gets/{appid}/{userid}")
+    @GetMapping("/gets/{appid}")
     @LogEs(url = "/user/gets",dec = "获取用户")
     public Response<?> getUser(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) String sign
     ){
         Coco coco = null;
         List<User> user = null;
         Response<?> response = null;
         try {
-//            validate(appid, userid, data,sign);
               user = userMagr.getUser();
               coco = Coco.ok;
         }catch (TypeException message) {
@@ -227,14 +226,15 @@ public class UserService extends Validate {
     @LogEs(url = "/user/delete",dec = "用户注销")
     public Response<?> deleteUser(
             @PathVariable String appid,
-            @PathVariable Integer userid,
-            @RequestParam(value = "",required = false) String sign
+            @RequestParam(value = "userid",required = false) Integer userid,
+            @RequestParam(value = "",required = false) String sign,
+            @RequestParam(value = "",required = false) Integer delUserid
     ){
         Coco coco = null;
         Response<?> response = null;
         try {
             User validate = validate(appid, userid,sign);
-            userMagr.deleteUser(userid,validate.getName());
+            userMagr.deleteUser(delUserid,userid);
 
             coco = Coco.ok;
         }catch (TypeException message) {
@@ -316,6 +316,38 @@ public class UserService extends Validate {
             coco.message = e.getMessage();
         }finally {
             response = new Response<>(coco);
+        }
+        return response;
+    }
+
+
+
+
+    @GetMapping("/getUserStatus/{appid}")
+    @LogEs(url = "/user/getUserStatus",dec = "获取用户登录状态")
+    public Response<?> getUserLoginStatus(
+            @PathVariable String appid,
+            @RequestParam(value = "userid",required = false) Integer userid,
+            @RequestParam(value = "",required = false) String sign
+    ){
+        Coco coco = null;
+        Response<?> response = null;
+        Object res = new Object();
+        try {
+            res = userMagr.getUserLoginStatus(userid);
+            coco = Coco.ok;
+        }catch (TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        }catch (DataException dataException) {
+            coco = Coco.InitCoco;
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        }catch (Exception e){
+            coco = Coco.InitCoco;
+            coco.code = -101;
+            coco.message = e.getMessage();
+        }finally {
+            response = new Response<>(coco,res);
         }
         return response;
     }

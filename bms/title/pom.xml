@@ -22,11 +22,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.codeljx</groupId>
-            <artifactId>user</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.example</groupId>
+            <artifactId>annotion</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
+
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

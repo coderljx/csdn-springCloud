@@ -1,9 +1,9 @@
 package com.codeljxUser.service;
 
 
-import LjxRedis.RedisString;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
+import Pojo.LjxRedis.RedisString;
 import Pojo.LjxUtils.UUID;
 import Pojo.SearchArgs;
 import com.codeljxUser.Dao.UserDao;
@@ -54,10 +54,10 @@ public class UserMagr {
      * 设置用户权限
      * @param roleid
      */
-    public void setUserRole(Integer roleid,String modify){
-        User user = new User();
+    public void setUserRole(Integer roleid,Integer userid){
+        User user = userDao.querUserById(userid);
         user.setRoleid(roleid);
-        userDao.updateUser(user,modify);
+        userDao.updateUser(user,user.getName());
     }
     
     
@@ -69,10 +69,10 @@ public class UserMagr {
     /**
      * 删除用户
      * @param userid 用户id
-     * @param modify 操作人
      */
-    public void deleteUser(Integer userid,String modify){
-        userDao.deleteUser(userid,modify);
+    public void deleteUser(Integer delUserid,Integer userid){
+        User user = userDao.querUserById(userid);
+        userDao.deleteUser(delUserid,user.getName());
     }
 
 
@@ -83,7 +83,8 @@ public class UserMagr {
     public void followUser(User user) {
         List<SearchArgs.Condition> children = user.getSearchArgsMap().getArgsItem().getChildren();
         SearchArgs.Condition condition = children.get(0);
-        userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()),user.getName());
+        User user1 = userDao.querUserById(user.getId());
+        userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()),user1.getName());
     }
 
 
@@ -98,6 +99,20 @@ public class UserMagr {
             followList.add(child.getValue());
         }
         userDao.unFollowUser(user.getId(),followList);
+    }
+
+
+    /**
+     * 获取用户登录状态，
+     * 查询redis中 该用户是否登录
+     * @param userid
+     * @return
+     */
+    public Object getUserLoginStatus(Integer userid) {
+        if (userid == null || userid <= 0) {
+            throw new TypeException("E000001_02");
+        }
+        return string.getKey(userid + "");
     }
 
 

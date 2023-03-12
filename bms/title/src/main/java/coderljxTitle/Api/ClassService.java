@@ -8,9 +8,9 @@ import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.MapUtils;
 import Pojo.LjxUtils.UUID;
+import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.ClassMgr;
-import com.codeljxUser.Validate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -59,11 +59,11 @@ public class ClassService extends Validate {
     }
 
 
-    @PostMapping("/addModule/{appid}/{userid}")
+    @PostMapping("/addModule/{appid}")
     @LogEs(url = "/class/addModule",dec = "新增系统模块")
     public Response<?> addModules(
             @PathVariable String appid,
-            @PathVariable Integer userid,
+            @RequestParam(value = "userid",required = false) Integer userid,
             @RequestParam(value = "",required = false) String sign,
             @RequestBody String data
     ){
@@ -73,7 +73,7 @@ public class ClassService extends Validate {
             User user = validate(appid, userid, sign, data);
             Module module = MapUtils.MapToObject(data, Module.class);
 
-            moduleMgr.addModules(module, user.getName());
+            moduleMgr.addModules(module, user,appid);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);

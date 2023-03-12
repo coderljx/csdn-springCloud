@@ -17,7 +17,7 @@ public class Config {
 
 
     @Bean
-    @LoadBalanced
+    @LoadBalanced  // 打开负载均衡，会根据nacos注册中心 自动换到对应的服务
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

@@ -20,7 +20,6 @@
         <module>user</module>
         <module>esDB</module>
         <module>annotion</module>
-        <module>reids</module>
         <module>title</module>
         <module>gateWay</module>
         <module>activities</module>
@@ -50,11 +49,6 @@
                 <version>8.0.18</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.example</groupId>
-                <artifactId>DB</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
             <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>

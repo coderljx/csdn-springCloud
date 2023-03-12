@@ -8,9 +8,9 @@ import Pojo.DB.User;
 import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.UUID;
+import Pojo.LjxUtils.Validate;
 import Pojo.SearchArgsMap;
 import an.Log.LogEs;
-import com.codeljxUser.Validate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -76,8 +76,6 @@ public class ActivitiesService extends Validate {
         try {
             SearchArgsMap validate = validate(appid, data);
 
-
-
             coco = Coco.ok;
         }catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
@@ -95,6 +93,8 @@ public class ActivitiesService extends Validate {
         }
         return response;
     }
+
+
 
 
 }

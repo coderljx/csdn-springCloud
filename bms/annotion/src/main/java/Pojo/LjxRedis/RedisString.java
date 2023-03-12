@@ -1,4 +1,4 @@
-package LjxRedis;
+package Pojo.LjxRedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 @Service
-public class RedisString extends LjxRedis.RedisTemplate {
+public class RedisString extends Pojo.LjxRedis.RedisTemplate {
 
     private final Jedis jedis;
 
