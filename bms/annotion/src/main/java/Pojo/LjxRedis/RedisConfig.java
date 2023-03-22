@@ -43,7 +43,7 @@ public class RedisConfig {
     @Bean
     public JedisPool jedisPool() {
         JedisPoolConfig config = new JedisPoolConfig();
-        JedisPool jedisPool = new JedisPool(config,"192.168.0.101",6379);
+        JedisPool jedisPool = new JedisPool(config,"192.168.0.104",6379);
         return jedisPool;
     }
 

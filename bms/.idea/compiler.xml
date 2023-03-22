@@ -11,6 +11,7 @@
         <module name="esDB" />
         <module name="annotion" />
         <module name="activities" />
+        <module name="wechat" />
         <module name="title" />
         <module name="user" />
         <module name="gateWay" />
@@ -18,6 +19,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="reids" target="1.8" />
+      <module name="untitled" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -29,7 +31,9 @@
       <module name="gateWay" options="-parameters" />
       <module name="reids" options="-parameters" />
       <module name="title" options="-parameters" />
+      <module name="untitled" options="-parameters" />
       <module name="user" options="-parameters" />
+      <module name="wechat" options="-parameters" />
     </option>
   </component>
 </project>

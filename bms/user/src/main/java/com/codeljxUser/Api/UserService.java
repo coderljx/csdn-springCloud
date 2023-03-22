@@ -332,7 +332,7 @@ public class UserService extends Validate {
     ){
         Coco coco = null;
         Response<?> response = null;
-        Object res = new Object();
+        User res = new User();
         try {
             res = userMagr.getUserLoginStatus(userid);
             coco = Coco.ok;

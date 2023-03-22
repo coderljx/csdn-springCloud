@@ -23,6 +23,7 @@
         <module>title</module>
         <module>gateWay</module>
         <module>activities</module>
+        <module>wechat</module>
     </modules>
 
     <properties>

@@ -42,7 +42,7 @@ public class RedisString extends Pojo.LjxRedis.RedisTemplate {
      * @param key
      * @return
      */
-    public Object getKey(String key) {
+    public String getKey(String key) {
         return jedis.get(key);
     }
 

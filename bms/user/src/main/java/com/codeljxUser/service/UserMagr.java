@@ -108,11 +108,13 @@ public class UserMagr {
      * @param userid
      * @return
      */
-    public Object getUserLoginStatus(Integer userid) {
+    public User getUserLoginStatus(Integer userid) {
         if (userid == null || userid <= 0) {
             throw new TypeException("E000001_02");
         }
-        return string.getKey(userid + "");
+        User user = userDao.querUserById(userid);
+        user.setUserLoginKey(string.getKey(userid + ""));
+        return user;
     }
 
 

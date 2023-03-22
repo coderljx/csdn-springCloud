@@ -10,7 +10,7 @@
     <update id="delModule">
         update module
         set is_delete   = 1,
-            modify_date = now(),
+            modify_time = now(),
             modify_by   = #{modifyBy}
         where id = #{id}
     </update>

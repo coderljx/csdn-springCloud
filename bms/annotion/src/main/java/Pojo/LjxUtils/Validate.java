@@ -16,13 +16,14 @@ public class Validate {
 
 //        this.validate(appid, userid,sign);
 
-        return this.validate(appid, userid,sign);
+        return this.validate(appid, userid,data);
     }
 
     public User validate(String appid, Integer userid,String data) throws NoSuchFieldException, IllegalAccessException{
 
         User user = new User();
         user.setId(userid);
+        user.setAppId(Integer.valueOf(appid));
         user.setSearchArgsMap(this.parseData(data));
         return user;
     }
@@ -42,7 +43,8 @@ public class Validate {
     }
 
 
-    public void validate(String appid) throws NoSuchFieldException, IllegalAccessException {
+    public void validate(String appid)  {
+
     }
 
 

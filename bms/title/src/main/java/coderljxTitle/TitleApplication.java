@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {"coderljxTitle"})
 @MapperScan({"coderljxTitle.Dao"})
-@EnableFeignClients // openfeign 服务调用
+@EnableFeignClients("Pojo.openFeign") // openfeign 服务调用
 @EnableDiscoveryClient // nacos
 public class TitleApplication {
 

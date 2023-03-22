@@ -73,7 +73,7 @@ public class ClassService extends Validate {
             User user = validate(appid, userid, sign, data);
             Module module = MapUtils.MapToObject(data, Module.class);
 
-            moduleMgr.addModules(module, user,appid);
+            moduleMgr.addModules(module, user);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
@@ -109,7 +109,7 @@ public class ClassService extends Validate {
                 throw new TypeException("E000003");
             }
 
-            moduleMgr.delModules(userid,user.getName());
+            moduleMgr.delModules(id,user);
             coco = Coco.ok;
         }catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
