@@ -4,9 +4,10 @@
 
     <select id="getAll" resultType="Pojo.DB.Activities">
         SELECT id,
-               activities_name activitiesName,
+               activities_name                    activitiesName,
                to_char(create_time, 'YYYY-MM-DD') createTime
-        FROM activities LIMIT #{limit} OFFSET #{offset};
+        FROM activities LIMIT #{limit}
+        OFFSET #{offset};
     </select>
 
 

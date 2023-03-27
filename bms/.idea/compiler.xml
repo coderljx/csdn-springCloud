@@ -26,7 +26,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="activities" options="-parameters" />
       <module name="annotion" options="-parameters" />
-      <module name="bms" options="-parameters" />
+      <module name="bms" options="" />
       <module name="esDB" options="-parameters" />
       <module name="gateWay" options="-parameters" />
       <module name="reids" options="-parameters" />

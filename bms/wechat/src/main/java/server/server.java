@@ -1,13 +1,17 @@
+package server;
+
+import Prodocol.ByteToMessage;
+import Prodocol.JsonMessage;
+import Prodocol.Message;
+import Prodocol.MessageToByte;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
-import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.logging.LoggingHandler;
+
+import java.nio.charset.StandardCharsets;
 
 public class server {
 
@@ -16,7 +20,6 @@ public class server {
 
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
-
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(boss,worker);
@@ -27,13 +30,16 @@ public class server {
         serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                // 加入http 解码器
-                socketChannel.pipeline()
-                        .addLast(new HttpServerCodec())
-                        .addLast(new ChunkedWriteHandler())
-                        .addLast(new HttpObjectAggregator(8192))
-                        // 使用netty的ws 协议升级 http协议
-                        .addLast(new WebSocketServerProtocolHandler("/hello"))
+                ChannelPipeline pipeline = socketChannel.pipeline();
+                pipeline
+                        /**
+                         *    接受到的字节码进行解码
+                         *    必须进行解码 不然收到的都是字节码
+                         *    根据对应的协议进行解码后 才能拿到数据
+                          */
+                        .addLast(new MessageToByte())
+                        .addLast(new ByteToMessage())
+                        .addLast(new LoggingHandler())
                         .addLast(new koko());
             }
         });
@@ -42,7 +48,7 @@ public class server {
 
         bind.addListener((ChannelFutureListener) channelFuture -> {
             if (bind.isDone()) {
-                System.out.println("服务器启动成功");
+
             }
         });
 
@@ -50,9 +56,8 @@ public class server {
 
 }
 
-class koko extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+class koko extends SimpleChannelInboundHandler<Message> {
 
-    private static int a = 1;
     /**
      * 读取 ws发送来的消息
      * @param ctx
@@ -60,22 +65,16 @@ class koko extends SimpleChannelInboundHandler<TextWebSocketFrame> {
      * @throws Exception
      */
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
-        String text = msg.text();
-        System.out.println("客户端消息 ： " + text);
+    protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 
-        a++;
-        /**
-         * 不管是什么协议 都是通过管道传输出去
-         * 不同过的协议只是 内容不同 本质都是通过 tcp/ip 协议之上构建的
-         * 前后端约定协议的内容 然后去解析
-         */
-        ctx.channel().writeAndFlush(new TextWebSocketFrame("I am Server Message!"));
+        byte[] data = msg.getData();
+        int len = msg.getLen();
 
-        while (a > 3) {
-            Thread.sleep(1000);
-            ctx.channel().writeAndFlush(new TextWebSocketFrame("我是服务器端主动推送的消息哦!"));
-        }
+        System.out.println("client 的数据 ： " + new String(data));
+
+        byte[] bytes = "{ name : 'ljx' }".getBytes(StandardCharsets.UTF_8);
+        Message message = new JsonMessage(bytes.length,bytes);
+        ctx.writeAndFlush(message);
     }
 
 
