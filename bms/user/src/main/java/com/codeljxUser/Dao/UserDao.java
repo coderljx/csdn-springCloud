@@ -12,10 +12,10 @@ import java.util.List;
 @Mapper
 public interface UserDao {
 
-    @Select("select * from user where is_delete = 0")
+    @Select("select id,name,phone from user where is_delete = 0")
     List<User> queryUser();
 
-    @Select("select * from user where is_delete = 0 and id = #{id}")
+    @Select("select id,name,phone from user where is_delete = 0 and id = #{id}")
     User querUserById(@Param("id") Integer id);
 
     /**

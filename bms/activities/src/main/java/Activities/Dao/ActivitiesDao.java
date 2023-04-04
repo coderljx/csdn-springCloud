@@ -17,4 +17,18 @@ public interface ActivitiesDao {
      */
     List<Activities> getAll(@Param("limit") Integer limit,
                             @Param("offset") Integer offset);
+
+
+    /**
+     * 新增一个活动
+     * @param activities
+     * @param createBy
+     * @return
+     */
+    Integer addActivice(@Param("list") List<Activities> activities,
+                        @Param("createBy") String createBy);
+
+
+    Integer updateActivice(@Param("activities") Activities activities,
+                           @Param("createBy") String createBy);
 }

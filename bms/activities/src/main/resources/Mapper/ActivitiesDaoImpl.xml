@@ -2,12 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Activities.Dao.ActivitiesDao">
 
+    <insert id="addActivice">
+        INSERT INTO activities(activities_name,create_by, create_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.activitiesName},#{createBy},now())
+        </foreach>
+    </insert>
+
+
+    <update id="updateActivice">
+        update activities set
+        <if test="activities.activitiesName != null">
+            activities_name = #{activities.activitiesName},
+            is_delete = '1',
+        </if>
+        modify_time = now(),
+        modifu_time = #{createBy}
+        where id = #{activities.id}
+    </update>
+
     <select id="getAll" resultType="Pojo.DB.Activities">
         SELECT id,
-               activities_name                    activitiesName,
-               to_char(create_time, 'YYYY-MM-DD') createTime
-        FROM activities LIMIT #{limit}
-        OFFSET #{offset};
+               SUBSTRING(activities_name, 0, 11)           activitiesName,
+               to_char(create_time, 'YYYY-MM-DD HH:mm:ss') createTime,
+               create_by                                   createBy
+        FROM activities
+        where is_delete = '0'
+        ORDER BY id DESC
+            LIMIT #{limit}
+        OFFSET #{offset}
     </select>
 
 

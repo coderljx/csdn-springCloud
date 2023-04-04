@@ -8,12 +8,14 @@ import redis.clients.jedis.JedisPool;
 @Service
 public class RedisString extends Pojo.LjxRedis.RedisTemplate {
 
-    private final Jedis jedis;
 
+    /**
+     * 从来连接池拿一个jedis出来，执行完毕再释放 不然消耗完毕之后 再访问redis会报错
+     * @param jedisPool
+     */
     @Autowired
     public RedisString(JedisPool jedisPool) {
         super(jedisPool);
-        this.jedis = super.getJedis();
     }
 
     /**
@@ -22,7 +24,9 @@ public class RedisString extends Pojo.LjxRedis.RedisTemplate {
      * @param value
      */
     public void setString(String key, String value) {
+        Jedis jedis = super.getJedis();
         jedis.set(key,value);
+        super.showJedis(jedis);
     }
 
 
@@ -33,8 +37,10 @@ public class RedisString extends Pojo.LjxRedis.RedisTemplate {
      * @param time
      */
     public void setString(String key, String value,int time) {
+        Jedis jedis = super.getJedis();
         jedis.set(key,value);
         setExpire(key,time);
+        super.showJedis(jedis);
     }
 
     /**
@@ -43,7 +49,10 @@ public class RedisString extends Pojo.LjxRedis.RedisTemplate {
      * @return
      */
     public String getKey(String key) {
-        return jedis.get(key);
+        Jedis jedis = super.getJedis();
+        String data = jedis.get(key);
+        super.showJedis(jedis);
+        return data;
     }
 
     /**
@@ -52,8 +61,13 @@ public class RedisString extends Pojo.LjxRedis.RedisTemplate {
      * @param time 毫秒格式 1000 = 1s
      */
     public void setExpire(String key,int time){
+        Jedis jedis = super.getJedis();
         jedis.expire(key,time);
+        super.showJedis(jedis);
     }
+
+
+
 
 
 }

@@ -15,8 +15,8 @@ public enum Coco {
     ok("Success", 200);
 
 
-    public String message;
-    public Integer code;
+    public  String message;
+    public  Integer code;
 
 
     Coco(String success, int i) {

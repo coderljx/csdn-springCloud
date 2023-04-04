@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coderljxTitle.Dao.TitleDao">
+
+
+    <insert id="addTitle">
+        insert into title(moduleid,titleName,create_time,create_by)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.moduleId},#{item.titleName},now(),#{createBy})
+        </foreach>
+    </insert>
+
+
+    <select id="getTitleByModule" resultType="Pojo.DB.Title">
+        SELECT t.id, t.titleName
+        FROM title t
+                 INNER JOIN module m ON t.moduleid = m.id AND m.is_delete = 0
+        WHERE t.is_delete = 0
+          AND m.id = #{id}
+    </select>
+
+
+</mapper>

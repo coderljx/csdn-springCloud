@@ -59,5 +59,28 @@ public class ResponseParse {
         return null;
     }
 
+    /**
+     * 获取返回值的status
+     * @return
+     */
+    public static String getStatus () {
+        JSONObject jsonObject = getJsonObject();
+        if (jsonObject != null) {
+            return (String) jsonObject.get("status");
+        }
+        return "";
+    }
+
+    /**
+     * 获取返回值的code
+     * @return
+     */
+    public static String getCode () {
+        JSONObject jsonObject = getJsonObject();
+        if (jsonObject != null) {
+            return (String) jsonObject.get("code");
+        }
+        return "";
+    }
 
 }

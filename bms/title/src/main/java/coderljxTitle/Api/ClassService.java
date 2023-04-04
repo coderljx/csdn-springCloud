@@ -29,63 +29,61 @@ public class ClassService extends Validate {
     private RestTemplate restTemplate;
 
     @GetMapping("/get/{appid}")
-    @LogEs(url = "/class/get",dec = "获取当前所有模块")
+    @LogEs(url = "/class/get", dec = "获取当前所有模块")
     public Response<?> getModules(
             @PathVariable String appid,
-            @RequestParam(value = "userid",required = false) Integer userid
-    ){
-        Coco coco = null;
+            @RequestParam(value = "userid", required = false) Integer userid
+    ) {
+        Coco coco = Coco.InitCoco;
         Response<?> response = null;
         List<Module> data = null;
         try {
             validate(appid);
 
             data = moduleMgr.queryModule();
-            coco = Coco.ok;
-        }catch (Pojo.LjxEx.TypeException message) {
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
-        }catch (DataException dataException) {
-            coco = Coco.InitCoco;
+        } catch (DataException dataException) {
             coco.code = -102;
             coco.message = dataException.getMessage();
-        }catch (Exception message) {
-            coco = Coco.InitCoco;
+        } catch (Exception message) {
             coco.code = -101;
             coco.message = message.getMessage();
         } finally {
-            response = new Response<>(coco,data);
+            response = new Response<>(coco, data);
         }
         return response;
     }
 
 
     @PostMapping("/addModule/{appid}")
-    @LogEs(url = "/class/addModule",dec = "新增系统模块")
+    @LogEs(url = "/class/addModule", dec = "新增系统模块")
     public Response<?> addModules(
             @PathVariable String appid,
-            @RequestParam(value = "userid",required = false) Integer userid,
-            @RequestParam(value = "",required = false) String sign,
+            @RequestParam(value = "userid", required = false) Integer userid,
+            @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
-    ){
-        Coco coco = null;
+    ) {
+        Coco coco = Coco.InitCoco;
         Response<?> response = null;
         try {
             User user = validate(appid, userid, sign, data);
             Module module = MapUtils.MapToObject(data, Module.class);
 
             moduleMgr.addModules(module, user);
-            coco = Coco.ok;
-        }catch (Pojo.LjxEx.TypeException message) {
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
-        }catch (DataException dataException) {
-            coco = Coco.InitCoco;
+        } catch (DataException dataException) {
             coco.code = -102;
             coco.message = dataException.getMessage();
-        }catch (Exception e){
-            coco = Coco.InitCoco;
+        } catch (Exception e) {
             coco.code = -101;
             coco.message = e.getMessage();
-        }finally {
+        } finally {
             response = new Response<>(coco);
         }
         return response;
@@ -93,68 +91,65 @@ public class ClassService extends Validate {
 
 
     @GetMapping("/delModules/{appid}")
-    @LogEs(url = "/class/delModules",dec = "删除系统模块")
+    @LogEs(url = "/class/delModules", dec = "删除系统模块")
     public Response<?> delModules(
             @PathVariable String appid,
-            @RequestParam(value = "userid",required = false) Integer userid,
-            @RequestParam(value = "",required = false) String sign,
-            @RequestParam(value = "id",required = false) Integer id
-    ){
-        Coco coco = null;
+            @RequestParam(value = "userid", required = false) Integer userid,
+            @RequestParam(value = "", required = false) String sign,
+            @RequestParam(value = "id", required = false) Integer id
+    ) {
+        Coco coco = Coco.InitCoco;
         Response<?> response = null;
         try {
             User user = validate(appid, userid, sign);
 
-            if (id == null || id <= 0){
+            if (id == null || id <= 0) {
                 throw new TypeException("E000003");
             }
 
-            moduleMgr.delModules(id,user);
-            coco = Coco.ok;
-        }catch (Pojo.LjxEx.TypeException message) {
+            moduleMgr.delModules(id, user);
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
-        }catch (DataException dataException) {
-            coco = Coco.InitCoco;
+        } catch (DataException dataException) {
             coco.code = -102;
             coco.message = dataException.getMessage();
-        }catch (Exception e){
-            coco = Coco.InitCoco;
+        } catch (Exception e) {
             coco.code = -101;
             coco.message = e.getMessage();
-        }finally {
+        } finally {
             response = new Response<>(coco);
         }
         return response;
     }
 
 
-
     @GetMapping("/getLinks/{appid}")
-    @LogEs(url = "/class/getLinks",dec = "获取广告的图片链接")
+    @LogEs(url = "/class/getLinks", dec = "获取广告的图片链接")
     public Response<?> getLinks(
             @PathVariable String appid,
-            @RequestParam(value = "",required = false) String sign
-    ){
-        Coco coco = null;
+            @RequestParam(value = "", required = false) String sign
+    ) {
+        Coco coco = Coco.InitCoco;
         Response<?> response = null;
         List<String> res = new ArrayList<>();
         try {
             validate(appid, sign);
             res = moduleMgr.getLinks();
 
-            coco = Coco.ok;
-        }catch (Pojo.LjxEx.TypeException message) {
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (Pojo.LjxEx.TypeException message) {
             coco = UUID.ExceptionFill(message);
-        }catch (DataException dataException) {
-            coco = Coco.InitCoco;
+        } catch (DataException dataException) {
             coco.code = -102;
             coco.message = dataException.getMessage();
-        }catch (Exception e){
-            coco = Coco.InitCoco;
+        } catch (Exception e) {
             coco.code = -101;
             coco.message = e.getMessage();
-        }finally {
-            response = new Response<>(coco,res);
+        } finally {
+            response = new Response<>(coco, res);
         }
         return response;
     }

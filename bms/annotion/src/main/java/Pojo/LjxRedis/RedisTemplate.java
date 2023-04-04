@@ -15,4 +15,11 @@ class RedisTemplate {
         return jedisPool.getResource();
     }
 
+    void showJedis(Jedis jedis) {
+        // 释放链接，不然会报错
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
 }

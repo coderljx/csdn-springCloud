@@ -6,7 +6,7 @@
     <insert id="addUserText">
         insert into text(detail, uid, create_by, create_time, coverPhoto, titleIdStr, textType, releaseForm,
                          contextLevel, imageStr, coverTitle)
-        values (#{text.detail}, #{text.uid}, #{text.create_by}, now(), #{text.coverPhoto}, #{text.titleIdStr},
+        values (#{text.detail}, #{text.uid}, #{text.createBy}, now(), #{text.coverPhoto}, #{text.titleIdStr},
                 #{text.textType}, #{text.releaseForm},
                 #{text.contextLevel}, #{text.imageStr}, #{text.coverTitle})
     </insert>
@@ -22,9 +22,19 @@
 
 
     <select id="getUserText" resultType="Pojo.DB.Text">
-        SELECT *
+        SELECT
+            detail,
+            coverPhoto,
+            uid,
+            titleIdStr,
+            textType,
+            releaseForm,
+            contextLevel,
+            imageStr,
+            coverTitle
         FROM text
         WHERE uid = #{userid}
+          <if test="id != null and id > 0"> AND id = #{id} </if>
           AND is_delete = 0
     </select>
 

@@ -2,7 +2,8 @@ package coderljxTitle.Mgr;
 
 import Pojo.DB.Advertisement;
 import Pojo.DB.Text;
-import Pojo.LjxEx.TypeException;
+import Pojo.DB.User;
+import Pojo.LjxUtils.ResponseParse;
 import Pojo.LjxUtils.ThreadUtils;
 import Pojo.LjxUtils.UUID;
 import coderljxTitle.Dao.TextDao;
@@ -26,8 +27,11 @@ public class TextMgr {
     @Value("${file.exoprt}")
     private String fileExport;
 
-    public List<Text> getUserText(Integer userid) {
-        return textDao.getUserText(userid);
+    @Resource
+    private Pojo.openFeign.userOpenFeign userOpenFeign;
+
+    public List<Text> getUserText(Integer userid,Integer id) {
+        return textDao.getUserText(userid,id);
     }
 
     /**
@@ -43,17 +47,20 @@ public class TextMgr {
      * @param file         文章中上传的文件
      * @param coverTitle   封面标题
      */
-    public void addUserText(String detail, Integer uid, MultipartFile[] coverPhoto,
+    public void addUserText(String appid, String detail, Integer uid, MultipartFile[] coverPhoto,
                             String titleIdStr, Character textType,
                             Character releaseForm, Character contextLevel,
                             MultipartFile[] file, String coverTitle)
-            throws  ExecutionException, InterruptedException {
+            throws ExecutionException, InterruptedException {
         /**
          * 从线程池中拿两个线程分别执行文件保存操作，比之前一个线程运行的要快
          */
         String coverPhotoStr = ThreadUtils.invoke(() -> saveFIle(coverPhoto)).get();
         String imageStr = ThreadUtils.invoke(() -> saveFIle(file)).get();
         Text text = new Text(detail, uid, coverPhotoStr, titleIdStr, textType, releaseForm, contextLevel, imageStr, coverTitle);
+        String userByid = userOpenFeign.getUserByid(Integer.parseInt(appid), uid);
+        String userName = ResponseParse.getUserName(userByid, "name");
+        text.setCreateBy(userName);
         textDao.addUserText(text);
     }
 
@@ -61,10 +68,12 @@ public class TextMgr {
      * 删除用户的文章
      *
      * @param id
-     * @param modifyBY
+     * @param user
      */
-    public void deleteUserText(Integer id, String modifyBY) {
-        textDao.deleteUserText(id, modifyBY);
+    public void deleteUserText(Integer id, User user) {
+        String userByid = userOpenFeign.getUserByid(user.getAppId(), user.getId());
+        String name = ResponseParse.getUserName(userByid, "name");
+        textDao.deleteUserText(id, name);
     }
 
 
@@ -77,18 +86,17 @@ public class TextMgr {
      */
     private String saveFIle(MultipartFile[] files) throws IOException {
         StringBuilder str = new StringBuilder();
-        if (!(files == null || files.length == 0)) {
-            for (MultipartFile multipartFile : files) {
-                String contentType = Objects.requireNonNull(
-                        multipartFile.getContentType()).substring(0,
-                        multipartFile.getContentType().indexOf("application/"));
-                String name = UUID.getUUID() + "." + contentType;
-                String filePath = fileExport + File.separator + name;
-                str.append(name).append(",");
-                multipartFile.transferTo(new File(filePath));
-            }
-        } else {
-            throw new TypeException("E000005");
+        if ((files == null || files.length == 0)) {
+            return "";
+        }
+        for (MultipartFile multipartFile : files) {
+            String contentType = Objects.requireNonNull(
+                    multipartFile.getContentType()).substring(0,
+                    multipartFile.getContentType().indexOf("application/"));
+            String name = UUID.getUUID() + "." + contentType;
+            String filePath = fileExport + File.separator + name;
+            str.append(name).append(",");
+            multipartFile.transferTo(new File(filePath));
         }
         return str.substring(0, str.length() - 1);
     }
@@ -111,13 +119,13 @@ public class TextMgr {
 
     /**
      * 获得关注的人发布的文章
+     *
      * @param userid
      */
     public List<Text> getFollowedText(Integer userid) {
         List<Text> followedText = textDao.getFollowedText(userid);
         return followedText;
     }
-
 
 
 }

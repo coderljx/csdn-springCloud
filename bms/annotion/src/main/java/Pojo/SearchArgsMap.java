@@ -28,6 +28,8 @@ public class SearchArgsMap {
     private SearchArgs.ArgsItem argsItem = new SearchArgs.ArgsItem();
     private SearchArgs.Order order = new SearchArgs.Order();
 
+    private Object object = new Object();
+
     public SearchArgsMap(Map<String, Object> filters, Map<String, Object> order) {
         this.filters = filters;
         this.order1 = order;
@@ -67,6 +69,8 @@ public class SearchArgsMap {
         this.setPer_page(filters.get("per_page") == null ? 1 : (Integer) this.getFilters().get("per_page"));
         this.setCurr_page(filters.get("curr_page") == null ? 15 : (Integer) this.getFilters().get("curr_page"));
         this.setSearch((String) filters.get("search"));
+        // 传输的对象
+        this.setObject(filters.get("obj"));
     }
 
     /**

@@ -15,7 +15,8 @@ public interface TextDao {
      * @param userid
      * @return
      */
-    List<Text> getUserText(@Param("userid") Integer userid);
+    List<Text> getUserText(@Param("userid") Integer userid,
+                           @Param("id") Integer id);
 
     /**
      * 用户新增一个文章
