@@ -1,11 +1,7 @@
 package Pojo.DB;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Text extends Base{
 
     private String detail;
@@ -43,4 +39,20 @@ public class Text extends Base{
      * // 封面标题
      */
     private String coverTitle;
+
+    private Integer view; // 文章的查看次数
+
+    public Text() {}
+
+    public Text(String detail, Integer uid, String coverPhoto, String titleIdStr, Character textType, Character releaseForm, Character contextLevel, String imageStr, String coverTitle) {
+        this.detail = detail;
+        this.uid = uid;
+        this.coverPhoto = coverPhoto;
+        this.titleIdStr = titleIdStr;
+        this.textType = textType;
+        this.releaseForm = releaseForm;
+        this.contextLevel = contextLevel;
+        this.imageStr = imageStr;
+        this.coverTitle = coverTitle;
+    }
 }

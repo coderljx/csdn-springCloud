@@ -1,7 +1,9 @@
 package Pojo.LjxUtils;
 
 
+import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
+import an.NotNull.NotNull;
 import com.alibaba.fastjson2.JSONObject;
 
 import java.lang.reflect.Field;
@@ -231,6 +233,61 @@ public class MapUtils {
         }
         return newins;
     }
+
+
+    /**
+     * 自定义 NotNull 注解的实现，用来检查不能为空的字段 是不是出现null值
+     * 可以检查string，int 类型的值
+     * @param cls
+     */
+    public static void NotNullImp(Object cls) throws Exception {
+        Field[] fields = GetField(cls.getClass());
+        assert fields != null;
+        for (Field field : fields) {
+            // 利用反射，打开权限 这样可以访问private
+            field.setAccessible(true);
+
+            if (!field.isAnnotationPresent(NotNull.class)) continue;
+
+            NotNull annotation = field.getAnnotation(NotNull.class);
+            boolean value = annotation.value();
+            if (value) {
+                // 如果该字段不允许为空，那么从传入的对象中获取该字段的值，用来检查
+                Object o = field.get(cls);
+                boolean result = false;
+                if (o instanceof String) {
+                    result = StringUtils.isEmp((String) o);
+                }
+                if (o instanceof Integer) {
+                    result = StringUtils.isEmp((Integer) o);
+                }
+                if (result) {
+                    throw new DataException(field.getName());
+                }
+            }
+
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 }

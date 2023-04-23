@@ -99,4 +99,11 @@ public interface UserDao {
     Integer unFollowUser(@Param("userId") Integer userId,
                          @Param("list") List<String> followIds);
 
+
+    /**
+     * 获取当前用户的关注列表
+     * @param userId
+     */
+    List<Follow> getUserFollow(@Param("userId") Integer userId);
+
 }

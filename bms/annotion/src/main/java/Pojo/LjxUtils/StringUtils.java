@@ -12,4 +12,9 @@ public class StringUtils {
         return value == null || value.size() == 0;
     }
 
+
+    public static Boolean isEmp(Integer value) {
+        return value == null;
+    }
+
 }

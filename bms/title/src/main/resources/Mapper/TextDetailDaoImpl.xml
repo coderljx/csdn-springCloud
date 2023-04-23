@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coderljxTitle.Dao.TextDetailDao">
+
+
+    <insert id="addTextDetail" parameterType="Pojo.DB.TextDetail">
+        insert into text_detail(user_id, text_id, action , create_time, create_by)
+        values (#{userId}, #{textId}, #{action},  now(), #{createBy})
+    </insert>
+
+
+    <update id="updateTextDetail" parameterType="Pojo.DB.TextDetail">
+        UPDATE text_detail
+        SET modify_time = NOW(),
+        modify_by = #{modifyBy}
+        <if test="action != null"> , action = #{action} </if>
+        where text_id = #{textId} and is_delete = 0 and user_id = #{userId}
+    </update>
+
+
+    <update id="delTextDetail">
+        UPDATE text_detail
+        SET modify_time = NOW(),
+            modify_by = #{modify},
+            is_delete = 1
+        where text_id = #{id} and is_delete = 0 and user_id = #{userid};
+    </update>
+
+
+</mapper>

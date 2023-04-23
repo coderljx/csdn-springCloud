@@ -18,7 +18,7 @@
         where id = #{userid}
     </update>
     <delete id="unFollowUser">
-        delete follow where user_id = #{userId} and follow_id in
+        delete from follow where user_id = #{userId} and follow_id in
         <foreach collection="list" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
@@ -30,7 +30,7 @@
     </insert>
 
     <insert id="followUser">
-        insert into follow(user_id, follow_id, crete_time, create_by)
+        insert into follow(user_id, follow_id, create_time, create_by)
         values (#{userId}, #{followId}, now(), #{modyfiBy})
     </insert>
 
@@ -49,10 +49,15 @@
     </select>
 
     <select id="queryFollow" resultType="Pojo.DB.Follow">
-        SELECT id, user_id, follow_id, create_time
+        SELECT id, user_id as userId, follow_id followId, create_time as createTime
         FROM `follow`
         WHERE user_id = #{userid}
           and follow_id = #{followId}
+    </select>
+
+
+    <select id="getUserFollow" resultType="Pojo.DB.Follow">
+        SELECT follow_id followId FROM follow WHERE user_id = #{userId}
     </select>
 
 </mapper>

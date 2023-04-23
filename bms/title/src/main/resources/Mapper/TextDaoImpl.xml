@@ -3,7 +3,7 @@
 <mapper namespace="coderljxTitle.Dao.TextDao">
 
 
-    <insert id="addUserText">
+    <insert id="addUserText" parameterType="Pojo.DB.Text" useGeneratedKeys="true" keyProperty="id">
         insert into text(detail, uid, create_by, create_time, coverPhoto, titleIdStr, textType, releaseForm,
                          contextLevel, imageStr, coverTitle)
         values (#{text.detail}, #{text.uid}, #{text.createBy}, now(), #{text.coverPhoto}, #{text.titleIdStr},
@@ -21,21 +21,45 @@
     </update>
 
 
-    <select id="getUserText" resultType="Pojo.DB.Text">
+    <select id="getUserText" resultType="coderljxTitle.Bean.TextVO">
         SELECT
-            detail,
-            coverPhoto,
-            uid,
-            titleIdStr,
-            textType,
-            releaseForm,
-            contextLevel,
-            imageStr,
-            coverTitle
-        FROM text
-        WHERE uid = #{userid}
-          <if test="id != null and id > 0"> AND id = #{id} </if>
-          AND is_delete = 0
+        t.detail,
+        t.coverPhoto,
+        t.uid,
+        t.titleIdStr,
+        t.textType,
+        t.releaseForm,
+        t.contextLevel,
+        t.imageStr,
+        t.coverTitle,
+        (
+        SELECT COUNT(1) FROM text t2 LEFT JOIN text_detail td ON td.text_id = t2.id AND td.is_delete = 0 WHERE
+        t2.id = #{id}
+        AND t2.is_delete = 0
+        AND td.action = '0'
+        ) stepOn,
+        (
+        SELECT COUNT(1) FROM text t2 LEFT JOIN text_detail td ON td.text_id = t2.id AND td.is_delete = 0 WHERE
+        t2.id = #{id}
+        AND t2.is_delete = 0
+        AND td.action = '1'
+        ) `like`
+        <if test="userid != null and userid > 0">
+            ,
+            (
+            SELECT
+            t2.action
+            FROM
+            text_detail t2
+            WHERE
+            t2.user_id = #{userid}
+            AND t2.text_id = #{id}
+            AND t2.is_delete = 0
+            ) reqUserAction
+        </if>
+
+        FROM text t
+        WHERE t.is_delete = 0 AND t.id = #{id}
     </select>
 
     <select id="getAdv" resultType="Pojo.DB.Advertisement" parameterType="list">
@@ -47,14 +71,82 @@
     </select>
 
 
-    <select id="getFollowedText" resultType="Pojo.DB.Text">
-        SELECT t.*,
+    <select id="getFollowedText" resultType="coderljxTitle.Bean.TextVO">
+        SELECT t.id,
+               t.coverPhoto,
+               t.uid,
+               t.titleIdStr,
+               t.textType,
+               t.releaseForm,
+               t.contextLevel,
+               t.imageStr,
+               t.coverTitle,
                u.name userName
         FROM text t
                  LEFT JOIN user u on u.id = t.uid
-        WHERE t.isdelete = 0
-          AND t.uid IN (SELECT follow_id FROM follow WHERE uid = #{userid})
+        WHERE t.is_delete = 0
+          AND t.uid IN (#{follows})
         ORDER BY t.create_time DESC
     </select>
+
+
+    <select id="getHotText" resultType="coderljxTitle.Bean.TextVO">
+        select t.id,
+--                t.detail,
+               t.coverPhoto,
+               t.create_time,
+               t.create_by,
+               t.modify_time,
+               t.modify_by,
+               t.is_delete,
+               t.uid,
+               t.titleIdStr,
+               t.textType,
+               t.releaseForm,
+               t.contextLevel,
+               t.imageStr,
+               t.coverTitle,
+               t.view,
+               u.id as uid,
+               u.name as userName
+        from text t
+                 left join user u on t.uid = u.id and u.is_delete = 0
+        where t.is_delete = 0
+          and t.releaseForm = '1'
+        order by t.view
+            limit 40
+    </select>
+
+
+
+    <select id="getTextByUid" resultType="coderljxTitle.Bean.UserVo">
+        select u.id as userId,
+               u.name as userName,
+               datediff(now(), u.create_time)                                                 as createTime,
+               (select count(1)
+                from text t1
+                where t1.is_delete = 0
+                  and t1.uid = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)) as originalityCount,
+               (select sum(t1.view)
+                from text t1
+                where t1.is_delete = 0
+                  and t1.uid = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)) as viewCount
+        <if test="userid != null and userid > 0">
+            ,
+            (
+            ifnull((select id from follow where user_id =  #{userid}
+            and follow_id = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)),0)
+            ) as isFollow
+        </if>
+        from text t
+                 left join user u on u.id = t.uid and u.is_delete = 0
+        where t.id = #{textId}
+          and t.is_delete = 0
+    </select>
+
+
+
+
+
 
 </mapper>

@@ -2,6 +2,7 @@ package com.codeljxUser.Api;
 
 
 import Pojo.DB.Coco;
+import Pojo.DB.Follow;
 import Pojo.DB.Response;
 import Pojo.DB.User;
 import Pojo.LjxEx.DataException;
@@ -259,7 +260,7 @@ public class UserService extends Validate {
         Coco coco = Coco.InitCoco;
         Response<?> response = null;
         try {
-            User validate = validate(appid, userid, sign);
+            User validate = validate(appid, userid, data);
 
             userMagr.followUser(validate);
 
@@ -281,7 +282,7 @@ public class UserService extends Validate {
 
 
     @PostMapping("/unfollow/{appid}")
-    @LogEs(url = "/user/unfollow", dec = "关注用户")
+    @LogEs(url = "/user/unfollow", dec = "取关用户")
     public Response<?> unFollowUser(
             @PathVariable String appid,
             @RequestParam(value = "userid", required = false) Integer userid,
@@ -291,7 +292,7 @@ public class UserService extends Validate {
         Coco coco = Coco.InitCoco;
         Response<?> response = null;
         try {
-            User validate = validate(appid, userid, sign);
+            User validate = validate(appid, userid, data);
 
             userMagr.unFollowUser(validate);
 
@@ -339,6 +340,43 @@ public class UserService extends Validate {
         }
         return response;
     }
+
+
+
+
+
+    @GetMapping("/getUserFollow/{appid}")
+    @LogEs(url = "/user/getUserFollow", dec = "获取用户关注人列表")
+    public Response<?> getUserFollow(
+            @PathVariable String appid,
+            @RequestParam(value = "userid", required = false) Integer userid,
+            @RequestParam(value = "sign", required = false) String sign
+    ) {
+        Coco coco = Coco.InitCoco;
+        Response<?> response = null;
+        List<Follow> userFollow = null;
+        try {
+            if (userid == null || userid <= 0) {
+                throw new DataException("userid");
+            }
+            userFollow = userMagr.getUserFollow(userid);
+
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        } catch (DataException dataException) {
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        } catch (Exception e) {
+            coco.code = -101;
+            coco.message = e.getMessage();
+        } finally {
+            response = new Response<>(coco,userFollow);
+        }
+        return response;
+    }
+
 
 
 }

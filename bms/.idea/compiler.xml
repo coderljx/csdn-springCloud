@@ -12,9 +12,10 @@
         <module name="annotion" />
         <module name="activities" />
         <module name="wechat" />
+        <module name="comment" />
         <module name="title" />
-        <module name="user" />
         <module name="gateWay" />
+        <module name="user" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,6 +28,7 @@
       <module name="activities" options="-parameters" />
       <module name="annotion" options="-parameters" />
       <module name="bms" options="" />
+      <module name="comment" options="-parameters" />
       <module name="esDB" options="-parameters" />
       <module name="gateWay" options="-parameters" />
       <module name="reids" options="-parameters" />

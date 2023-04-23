@@ -1,6 +1,7 @@
 package com.codeljxUser.service;
 
 
+import Pojo.DB.Follow;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxRedis.RedisString;
@@ -84,7 +85,14 @@ public class UserMagr {
         List<SearchArgs.Condition> children = user.getSearchArgsMap().getArgsItem().getChildren();
         SearchArgs.Condition condition = children.get(0);
         User user1 = userDao.querUserById(user.getId());
-        userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()),user1.getName());
+
+        /**
+         * 如果当前用户没有关注过该用户，才能进行关注，不能重复关注
+         */
+        Follow follow = userDao.queryFollow(user.getId(), Integer.parseInt(condition.getValue()));
+        if (follow == null || follow.getId() <= 0) {
+            userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()),user1.getName());
+        }
     }
 
 
@@ -116,6 +124,20 @@ public class UserMagr {
         user.setUserLoginKey(string.getKey(userid + ""));
         return user;
     }
+
+
+    /**
+     * 获取当前用户的关注人列表
+     * @param userid
+     */
+    public List<Follow> getUserFollow(Integer userid) {
+        List<Follow> userFollow = userDao.getUserFollow(userid);
+        return userFollow;
+    }
+
+
+
+
 
 
 }

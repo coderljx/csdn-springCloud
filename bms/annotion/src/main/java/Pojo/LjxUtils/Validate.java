@@ -2,6 +2,7 @@ package Pojo.LjxUtils;
 
 
 import Pojo.DB.User;
+import Pojo.LjxEx.TypeException;
 import Pojo.SearchArgsMap;
 
 public class Validate {
@@ -20,6 +21,9 @@ public class Validate {
     }
 
     public User validate(String appid, Integer userid,String data) throws NoSuchFieldException, IllegalAccessException{
+        if (userid == null || userid <= 0) {
+            throw new TypeException("E000001_02");
+        }
 
         User user = new User();
         user.setId(userid);
@@ -30,6 +34,13 @@ public class Validate {
 
     public SearchArgsMap validate(String appid, String data) throws NoSuchFieldException, IllegalAccessException {
         return parseData(data);
+    }
+
+    public User validate(String appid, Integer userid) throws NoSuchFieldException, IllegalAccessException {
+        User user = new User();
+        user.setId(userid);
+        user.setAppId(Integer.valueOf(appid));
+        return user;
     }
 
 

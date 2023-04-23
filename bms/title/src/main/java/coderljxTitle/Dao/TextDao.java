@@ -2,6 +2,8 @@ package coderljxTitle.Dao;
 
 import Pojo.DB.Advertisement;
 import Pojo.DB.Text;
+import coderljxTitle.Bean.TextVO;
+import coderljxTitle.Bean.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,7 +17,7 @@ public interface TextDao {
      * @param userid
      * @return
      */
-    List<Text> getUserText(@Param("userid") Integer userid,
+    TextVO getUserText(@Param("userid") Integer userid,
                            @Param("id") Integer id);
 
     /**
@@ -47,6 +49,20 @@ public interface TextDao {
      * @param userid
      * @return
      */
-    List<Text> getFollowedText(@Param("userid") Integer userid);
+    List<TextVO> getFollowedText(@Param("userid") Integer userid,
+                                 @Param("follows") String follows);
+
+
+    /**
+     * 获取热点文章 主页调用 只查询所有人可见的文章，
+     * @return
+     */
+    List<TextVO> getHotText();
+
+
+
+    UserVo getTextByUid(Integer userid,Integer textId);
+
+
 
 }

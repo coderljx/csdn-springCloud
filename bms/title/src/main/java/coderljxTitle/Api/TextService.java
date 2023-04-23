@@ -2,12 +2,13 @@ package coderljxTitle.Api;
 
 import Pojo.DB.Coco;
 import Pojo.DB.Response;
-import Pojo.DB.Text;
 import Pojo.DB.User;
 import Pojo.LjxEx.DataException;
 import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
+import coderljxTitle.Bean.TextVO;
+import coderljxTitle.Bean.UserVo;
 import coderljxTitle.Mgr.TextMgr;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,7 +72,7 @@ public class TextService extends Validate {
     }
 
     @GetMapping("/get/{appid}")
-    @LogEs(url = "/text/get", dec = "获取用户文章")
+    @LogEs(url = "/text/get", dec = "根据文章id获取文章")
     public Response<?> getText(
             @PathVariable String appid,
             @RequestParam(value = "userid", required = false) Integer userid,
@@ -80,9 +81,12 @@ public class TextService extends Validate {
     ) {
         Coco coco = Coco.InitCoco;
         Response<?> response = null;
-        List<Text> textList = null;
+        TextVO textList = null;
         try {
+
             textList = textMgr.getUserText(userid, id);
+
+
             coco.code = 200;
             coco.message = "Success";
         } catch (Pojo.LjxEx.TypeException message) {
@@ -170,15 +174,15 @@ public class TextService extends Validate {
     public Response<?> getFollowedText(
             @PathVariable String appid,
             @RequestParam(value = "userid", required = false) Integer userid,
-            @RequestParam(value = "", required = false) String sign
+            @RequestParam(value = "sign", required = false) String sign
     ) {
         Coco coco = Coco.InitCoco;
         Response<?> response = null;
-        List<Text> followedText = null;
+        List<TextVO> followedText = null;
         try {
-            User user = validate(appid, userid, sign);
+            User user = validate(appid, userid);
 
-            followedText = textMgr.getFollowedText(userid);
+            followedText = textMgr.getFollowedText(user);
             coco.code = 200;
             coco.message = "Success";
         } catch (Pojo.LjxEx.TypeException message) {
@@ -194,6 +198,74 @@ public class TextService extends Validate {
         }
         return response;
     }
+
+
+
+    @GetMapping("/getHotText/{appid}")
+    @LogEs(url = "/text/getHotText", dec = "获取热点文章")
+    public Response<?> getHotText(
+            @PathVariable String appid,
+            @RequestParam(value = "sign", required = false) String sign
+    ) {
+        Coco coco = Coco.InitCoco;
+        Response<?> response = null;
+        List<TextVO> textVOList = null;
+        try {
+            validate(appid);
+
+            textVOList = textMgr.getHotText();
+
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (Pojo.LjxEx.TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        } catch (DataException dataException) {
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        } catch (Exception e) {
+            coco.code = -101;
+            coco.message = e.getMessage();
+        } finally {
+            response = new Response<>(coco, textVOList);
+        }
+        return response;
+    }
+
+
+
+
+    @GetMapping("/getTextByUid/{appid}")
+    @LogEs(url = "/text/getTextByUid", dec = "根据文章id,获取用户信息")
+    public Response<?> getTextByUid(
+            @PathVariable String appid,
+            @RequestParam(value = "userid", required = false) Integer userid,
+            @RequestParam(value = "sign", required = false) String sign,
+            @RequestParam(value = "textId", required = false) Integer textId
+    ) {
+        Coco coco = Coco.InitCoco;
+        Response<?> response = null;
+        UserVo userVo = null;
+        try {
+            validate(appid);
+
+            userVo = textMgr.getTextByUid(userid,textId);
+
+            coco.code = 200;
+            coco.message = "Success";
+        } catch (Pojo.LjxEx.TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        } catch (DataException dataException) {
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        } catch (Exception e) {
+            coco.code = -101;
+            coco.message = e.getMessage();
+        } finally {
+            response = new Response<>(coco,userVo);
+        }
+        return response;
+    }
+
 
 
 }

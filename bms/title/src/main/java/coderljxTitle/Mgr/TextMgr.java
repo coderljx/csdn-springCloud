@@ -1,11 +1,17 @@
 package coderljxTitle.Mgr;
 
 import Pojo.DB.Advertisement;
+import Pojo.DB.Follow;
 import Pojo.DB.Text;
 import Pojo.DB.User;
+import Pojo.LjxEx.DataException;
+import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.ResponseParse;
+import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.ThreadUtils;
 import Pojo.LjxUtils.UUID;
+import coderljxTitle.Bean.TextVO;
+import coderljxTitle.Bean.UserVo;
 import coderljxTitle.Dao.TextDao;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +23,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -26,11 +33,13 @@ public class TextMgr {
     private TextDao textDao;
     @Value("${file.exoprt}")
     private String fileExport;
-
     @Resource
     private Pojo.openFeign.userOpenFeign userOpenFeign;
 
-    public List<Text> getUserText(Integer userid,Integer id) {
+    public TextVO getUserText(Integer userid,Integer id) {
+        if (id == null || id <= 0) {
+            throw new DataException("id");
+        }
         return textDao.getUserText(userid,id);
     }
 
@@ -119,13 +128,53 @@ public class TextMgr {
 
     /**
      * 获得关注的人发布的文章
-     *
-     * @param userid
+     * @param user
      */
-    public List<Text> getFollowedText(Integer userid) {
-        List<Text> followedText = textDao.getFollowedText(userid);
-        return followedText;
+    public List<TextVO> getFollowedText(User user) throws Exception {
+        String userFollow = userOpenFeign.getUserFollow(user.getAppId(), user.getId());
+        List<Follow> arrayObject = ResponseParse.getArrayObject(userFollow, Follow.class);
+        StringBuilder followIds = new StringBuilder();
+        if (arrayObject.size() != 0) {
+            for (int i = 0; i < arrayObject.size(); i++) {
+                Follow follow = arrayObject.get(i);
+                Integer followId = follow.getFollowId();
+                if (i == 0) {
+                    followIds.append(followId);
+                }else {
+                    followIds.append(",").append(followId);
+                }
+            }
+        }
+        // 如果当前这个用户没有关注过任何人
+        if (StringUtils.isEmp(followIds.toString())) {
+            return new CopyOnWriteArrayList<>();
+        }
+        return textDao.getFollowedText(user.getId(), followIds.toString());
     }
+
+
+    /**
+     * 获取热门文章
+     */
+    public List<TextVO> getHotText() {
+        return textDao.getHotText();
+    }
+
+
+    /**
+     * 根据文章id，查询这个文章主人的信息
+     * @param textId
+     */
+    public UserVo getTextByUid(Integer userid,Integer textId) {
+        if (textId == null || textId <= 0) {
+            throw new TypeException("E000003");
+        }
+        return textDao.getTextByUid(userid,textId);
+    }
+
+
+
+
 
 
 }

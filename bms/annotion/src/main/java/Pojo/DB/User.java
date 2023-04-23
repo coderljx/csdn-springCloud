@@ -16,5 +16,7 @@ public class User extends Base {
     private String userLoginKey; // 当前用户的key，存在redis 用来检查是否登录
     private Integer appId;
 
+    private String avatar; // 用户的头像
+
     private SearchArgsMap searchArgsMap;
 }

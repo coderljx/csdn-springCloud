@@ -24,6 +24,7 @@
         <module>gateWay</module>
         <module>activities</module>
         <module>wechat</module>
+        <module>comment</module>
     </modules>
 
     <properties>
