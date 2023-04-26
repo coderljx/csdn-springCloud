@@ -23,9 +23,9 @@ public class CommentService extends Validate {
 
     @PostMapping("/saveComment/{appid}")
     @LogEs(url = "comment/saveComment", dec = "用户编写评论")
-    public Response saveComment(@PathVariable("appid") String appid,
-                                @RequestParam(value = "userid", required = false) Integer userid,
-                                @RequestBody String data) {
+    public Response<?> saveComment(@PathVariable("appid") String appid,
+                                   @RequestParam(value = "userid", required = false) Integer userid,
+                                   @RequestBody String data) {
         Coco coco = Coco.InitCoco;
         coco.message = "success";
         coco.code = 200;
@@ -54,18 +54,18 @@ public class CommentService extends Validate {
 
     @GetMapping("/getCommentById/{appid}")
     @LogEs(url = "comment/getCommentById", dec = "根据文章id,获取该文章下的评论总数")
-    public Response getCommentById(@PathVariable("appid") String appid,
-                                   @RequestParam(value = "userid", required = false) Integer userid,
-                                   @RequestParam(value = "textId",required = false) Integer textId,
-                                   @RequestParam(value = "perPage",required = false) Integer perPage,
-                                   @RequestParam(value = "currPage",required = false) Integer currPage) {
+    public Response<?> getCommentById(@PathVariable("appid") String appid,
+                                      @RequestParam(value = "userid", required = false) Integer userid,
+                                      @RequestParam(value = "textId", required = false) Integer textId,
+                                      @RequestParam(value = "perPage", required = false) Integer perPage,
+                                      @RequestParam(value = "currPage", required = false) Integer currPage) {
         Coco coco = Coco.InitCoco;
         coco.message = "success";
         coco.code = 200;
         Response<?> response = null;
         CommentVo commentById = null;
         try {
-            User user = validate(appid,userid);
+            User user = validate(appid, userid);
             commentById = commentMgr.getCommentById(user, textId, perPage, currPage);
 
 
@@ -79,7 +79,37 @@ public class CommentService extends Validate {
             coco.message = e.getMessage();
             e.printStackTrace();
         } finally {
-            response = new Response<>(coco,commentById);
+            response = new Response<>(coco, commentById);
+        }
+        return response;
+    }
+
+
+    @PostMapping("/setCommentLike/{appid}")
+    @LogEs(url = "comment/setCommentLike", dec = "用户点赞或者取消点赞评论")
+    public Response<?> setCommentLike(@PathVariable("appid") String appid,
+                                      @RequestParam(value = "userid", required = false) Integer userid,
+                                      @RequestParam(value = "textid", required = false) Integer textId,
+                                      @RequestParam(value = "commentid", required = false) String commentId) {
+        Coco coco = Coco.InitCoco;
+        coco.message = "success";
+        coco.code = 200;
+        Response<?> response = null;
+        try {
+            User user = validate(appid, userid);
+            commentMgr.setCommentLike(user, commentId,textId);
+
+        } catch (TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        } catch (DataException dataException) {
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        } catch (Exception e) {
+            coco.code = -101;
+            coco.message = e.getMessage();
+            e.printStackTrace();
+        } finally {
+            response = new Response<>(coco);
         }
         return response;
     }

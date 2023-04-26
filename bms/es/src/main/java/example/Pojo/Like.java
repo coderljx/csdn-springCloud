@@ -1,14 +1,14 @@
 package example.Pojo;
 
-
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-
+/**
+ * 记录用户给那些评论点过赞
+ */
 @Data
-public class Comment {
-
+public class Like {
     @Field(type = FieldType.Text)
     private String id;
 
@@ -19,20 +19,10 @@ public class Comment {
     private Integer userId;
 
     @Field(type = FieldType.Text)
-    private String userName;
-
-    @Field(type = FieldType.Text)
-    private String comment;
-
-    @Field(type = FieldType.Long)
-    private Long createTime;
+    private String createTime;
 
     @Field(type = FieldType.Integer)
     private Integer textId; // 该评论信息是那个文章下面的
-
-    // 楼层id， 通过楼层id 可以区分那些评论是该楼层下的
-    @Field(type = FieldType.Text)
-    private String foor;
 
     /**
      * 该评论是否为回复评论
@@ -40,12 +30,5 @@ public class Comment {
      */
     @Field(type = FieldType.Keyword)
     private String parentComentId;
-
-    @Field(type = FieldType.Integer)
-    private Integer isDelete;
-
-
-
-
 
 }

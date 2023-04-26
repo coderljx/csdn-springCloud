@@ -18,13 +18,14 @@
 
     <modules>
         <module>user</module>
-        <module>esDB</module>
+<!--        <module>esDB</module>-->
         <module>annotion</module>
         <module>title</module>
         <module>gateWay</module>
         <module>activities</module>
         <module>wechat</module>
         <module>comment</module>
+        <module>es</module>
     </modules>
 
     <properties>
@@ -100,23 +101,26 @@
             </dependency>
 
         </dependencies>
+
     </dependencyManagement>
 
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+
+
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>repackage</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>
