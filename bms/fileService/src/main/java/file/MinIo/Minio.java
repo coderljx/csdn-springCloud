@@ -33,7 +33,6 @@ public class Minio {
         this.minioClient = minioClient;
     }
 
-
     public List<Bucket> getBucket() throws Exception {
         List<Bucket> buckets = minioClient.listBuckets();
         return buckets;
@@ -78,6 +77,7 @@ public class Minio {
 
     /**
      * 获得一个对象的预览地址，用于 img 图片的预览
+     *
      * @param bucket
      * @param name
      * @return

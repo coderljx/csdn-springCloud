@@ -62,7 +62,6 @@ public class FileService extends Validate {
             User validate = validate(appid, userid);
 
 
-
         } catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
         } catch (DataException dataException) {

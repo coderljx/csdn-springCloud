@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 
 @Configuration
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class MinIoConfig {
     private final Logger mylog = LoggerFactory.getLogger(MinIoConfig.class);
 
@@ -32,8 +30,9 @@ public class MinIoConfig {
      */
     @Bean
     public MinioClient createMinIoClient() {
-     MinioClient build = MinioClient.builder().endpoint(url).credentials(accessKey,secretKey).build();
-     return build;
+        MinioClient build = MinioClient.builder().endpoint(url).credentials(accessKey, secretKey).build();
+        return build;
     }
+
 
 }
