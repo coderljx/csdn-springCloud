@@ -26,6 +26,7 @@
         <module>comment</module>
         <module>es</module>
         <module>fileService</module>
+        <module>queue</module>
     </modules>
 
     <properties>
