@@ -1,0 +1,12 @@
+
+FROM openjdk:8-jdk-alpine
+
+
+MAINTAINER ljx 15928861541@163.com
+
+
+COPY *.jar /app.jar
+
+EXPOSE 9006
+
+ENTRYPOINT ["java","-jar","app.jar"]

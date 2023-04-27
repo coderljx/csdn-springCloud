@@ -1,8 +1,8 @@
 package org.ljx;
 
+import org.ljx.Mgr.CommentMgr;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ljx.Mgr.CommentMgr;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 

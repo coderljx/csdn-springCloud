@@ -25,6 +25,7 @@
         <module>wechat</module>
         <module>comment</module>
         <module>es</module>
+        <module>fileService</module>
     </modules>
 
     <properties>
