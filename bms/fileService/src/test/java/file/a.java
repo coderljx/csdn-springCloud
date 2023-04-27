@@ -27,17 +27,16 @@ public class a {
     @Test
     void a () throws Exception{
 
-        File file = new File("/Users/brother/Desktop/apache-maven-3.8.3/README.txt");
+        File file = new File("/Users/brother/Desktop/apache-maven-3.8.3/a.jpeg");
         FileInputStream inputStream = new FileInputStream(file);
-        String c =  MediaTypeFactory.getMediaType(file.getName()).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
-        minio.uploadFile(inputStream,c, "test","re");
+        minio.uploadFile(inputStream,"jpeg", "test","re");
 
     }
 
     @Test
     void a1 () throws Exception{
 
-        String preUrl = minio.getPreUrl("test", "koko001.png");
+        String preUrl = minio.getPreUrl("test", "re");
         System.out.println(preUrl);
 
     }

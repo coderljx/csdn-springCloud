@@ -1,16 +1,15 @@
 package file.MinIo;
 
 import file.config.MinIoConfig;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,9 +32,17 @@ public class Minio {
         this.minioClient = minioClient;
     }
 
-    public List<Bucket> getBucket() throws Exception {
+    public List<Bucket> getBuckets() throws Exception {
         List<Bucket> buckets = minioClient.listBuckets();
         return buckets;
+    }
+
+    public Boolean getBucket(String name) throws Exception {
+        return minioClient.bucketExists(BucketExistsArgs.builder().bucket(name).build());
+    }
+
+    public void createBucket(String name) throws Exception{
+        minioClient.makeBucket(MakeBucketArgs.builder().bucket(name).build());
     }
 
 
@@ -49,10 +56,12 @@ public class Minio {
      * @throws Exception
      */
     public void uploadFile(InputStream inputStream, String contentType, String bucket, String name) throws Exception {
+        if (!getBucket(bucket)) createBucket(bucket);
+        String c =  MediaTypeFactory.getMediaType(contentType).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
         minioClient.putObject(PutObjectArgs
                 .builder()
                 .bucket(bucket)
-                .contentType(contentType)
+                .contentType(c)
                 .object(name)
                 .stream(inputStream, inputStream.available(), -1)
                 .build());
@@ -89,7 +98,7 @@ public class Minio {
                         .builder()
                         .bucket(bucket)
                         .object(name)
-                        .expiry(30, TimeUnit.SECONDS)
+//                        .expiry(30, TimeUnit.SECONDS)
                         .method(Method.GET)
                         .build());
 
