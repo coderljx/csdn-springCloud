@@ -8,7 +8,9 @@
     <file url="file://$PROJECT_DIR$/es/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/esDB/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/esDB/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fileService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateWay/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/queue/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/title/src/main/java" charset="UTF-8" />

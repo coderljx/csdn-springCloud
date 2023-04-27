@@ -11,11 +11,13 @@
         <module name="annotion" />
         <module name="activities" />
         <module name="wechat" />
+        <module name="fileService" />
         <module name="comment" />
         <module name="title" />
         <module name="gateWay" />
         <module name="user" />
         <module name="es" />
+        <module name="queue" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -32,7 +34,9 @@
       <module name="comment" options="-parameters" />
       <module name="es" options="-parameters" />
       <module name="esDB" options="" />
+      <module name="fileService" options="-parameters" />
       <module name="gateWay" options="-parameters" />
+      <module name="queue" options="-parameters" />
       <module name="reids" options="-parameters" />
       <module name="title" options="-parameters" />
       <module name="untitled" options="-parameters" />

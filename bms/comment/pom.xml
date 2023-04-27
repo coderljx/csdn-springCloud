@@ -20,6 +20,8 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.image.prefix>ljx</docker.image.prefix>
+
+
         <docker.image.version>0.1</docker.image.version>
     </properties>
 
@@ -78,42 +80,43 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<!--                <configuration>-->
-<!--                    <includeSystemScope>true</includeSystemScope>-->
-<!--                    <excludes>-->
-<!--                        <exclude>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                        </exclude>-->
-<!--                    </excludes>-->
-<!--                </configuration>-->
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <!-- docker插件-->
-<!--            <plugin>-->
-<!--                <groupId>com.spotify</groupId>-->
-<!--                <artifactId>docker-maven-plugin</artifactId>-->
-<!--                <version>1.2.2</version>-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.2</version>
 
-<!--                <configuration>-->
-<!--                    &lt;!&ndash; 远程Docker的地址 &ndash;&gt;-->
-<!--                    <dockerHost>http://localhost:2375</dockerHost>-->
-<!--                    &lt;!&ndash; 镜像名称、前缀、项目名 &ndash;&gt;-->
-<!--                    <imageName>${docker.image.prefix}/${project.artifactId}/${docker.image.version}</imageName>-->
-<!--                    &lt;!&ndash;                     <imageName>koko</imageName>&ndash;&gt;-->
-<!--                    &lt;!&ndash; Dockerfile的位置 &ndash;&gt;-->
-<!--                    <dockerDirectory>src/main/docker</dockerDirectory>-->
-<!--                    <resources>-->
-<!--                        <resource>-->
-<!--                            <targetPath>/</targetPath>-->
-<!--                            &lt;!&ndash; 表示的target文件夹 &ndash;&gt;-->
-<!--                            <directory>${project.build.directory}</directory>-->
-<!--                            &lt;!&ndash; 表示打出来的JAR包&ndash;&gt;-->
-<!--                            <include>${project.build.finalName}.jar</include>-->
-<!--                        </resource>-->
-<!--                    </resources>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+                <configuration>
+                    <!-- 远程Docker的地址 -->
+                    <dockerHost>http://192.168.0.104:2375</dockerHost>
+                    <!-- 镜像名称、前缀、项目名 -->
+                    <imageName>${docker.image.prefix}/${project.artifactId}/${docker.image.version}</imageName>
+                    <!--                     <imageName>koko</imageName>-->
+                    <!-- Dockerfile的位置 -->
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <!-- 表示的target文件夹 -->
+                            <directory>${project.build.directory}</directory>
+                            <!-- 表示打出来的JAR包-->
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>

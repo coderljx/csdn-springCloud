@@ -1,8 +1,6 @@
 package file.MinIo;
 
-import file.config.MinIoConfig;
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import org.slf4j.Logger;
@@ -12,13 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -50,14 +43,14 @@ public class Minio {
      * 上传一个文件到 minio
      *
      * @param inputStream
-     * @param contentType
+     * @param fileName
      * @param bucket
      * @param name
      * @throws Exception
      */
-    public void uploadFile(InputStream inputStream, String contentType, String bucket, String name) throws Exception {
+    public void uploadFile(InputStream inputStream, String fileName, String bucket, String name) throws Exception {
         if (!getBucket(bucket)) createBucket(bucket);
-        String c =  MediaTypeFactory.getMediaType(contentType).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
+        String c =  MediaTypeFactory.getMediaType(fileName).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
         minioClient.putObject(PutObjectArgs
                 .builder()
                 .bucket(bucket)

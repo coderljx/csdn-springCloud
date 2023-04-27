@@ -1,19 +1,15 @@
 package file;
 
+import Pojo.LjxUtils.UUID;
 import file.MinIo.Minio;
-import io.minio.MinioClient;
-import io.minio.messages.Bucket;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.http.MediaTypeFactory;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.List;
 
 
 @SpringBootTest
@@ -27,19 +23,25 @@ public class a {
     @Test
     void a () throws Exception{
 
-        File file = new File("/Users/brother/Desktop/apache-maven-3.8.3/a.jpeg");
+        File file = new File("C:\\Users\\Brother\\Desktop\\1.jpg");
         FileInputStream inputStream = new FileInputStream(file);
-        minio.uploadFile(inputStream,"jpeg", "test","re");
+        minio.uploadFile(inputStream,"1.jpg", "img", UUID.getUUID());
 
     }
 
     @Test
     void a1 () throws Exception{
 
-        String preUrl = minio.getPreUrl("test", "re");
+        String preUrl = minio.getPreUrl("img", "41a2adcbe77d4e7598e40db66422015f");
         System.out.println(preUrl);
 
     }
+
+
+    public static void main(String[] args) {
+
+    }
+
 
 
 }
