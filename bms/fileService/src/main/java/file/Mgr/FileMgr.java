@@ -16,7 +16,7 @@ public class FileMgr {
     private Minio minio;
 
 
-    public void upload() {
+    public void saveFile() {
 
     }
 

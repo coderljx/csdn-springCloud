@@ -58,9 +58,8 @@ public class SearchArgsMap {
         if (filters.get("rules") != null) {
             List<Map<String, Object>> rules = (List<Map<String, Object>>) filters.get("rules");
             if (rules.size() != 0) {
-                List<Map<String, Object>> solr = new ArrayList<>();
                 // 简版搜索
-                solr.addAll(rules);
+                List<Map<String, Object>> solr = new ArrayList<>(rules);
                 if (solr.size() != 0) {
                     argsItem.setChildren(this.GetConditionFormMaps(solr));
                 }

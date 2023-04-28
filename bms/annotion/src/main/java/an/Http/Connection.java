@@ -26,7 +26,6 @@ public class Connection {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty( "Content-Type","application/json;charset=UTF-8");
         urlConnection.setDoOutput(true);//是否输入参数
-        urlConnection.setDoOutput(true);//是否输入参数
         urlConnection.setConnectTimeout(5000);
         return urlConnection;
     };

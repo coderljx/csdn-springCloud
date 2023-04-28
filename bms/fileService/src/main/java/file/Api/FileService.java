@@ -8,9 +8,13 @@ import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
+import file.Mgr.FileMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
 
 
 @RequestMapping ("/file")
@@ -18,18 +22,24 @@ import org.springframework.web.bind.annotation.*;
 public class FileService extends Validate {
     private final Logger mylog = LoggerFactory.getLogger(FileService.class);
 
+
+    @Resource
+    private FileMgr fileMgr;
+
+
     @PostMapping ("/saveFile/{appid}")
-    @LogEs (url = "file/saveFile", dec = "保存文件")
+    @LogEs (url = "file/saveFile", dec = "上传文件")
     public Response<?> saveFile(@PathVariable ("appid") String appid,
                                 @RequestParam (value = "userid", required = false) Integer userid,
-                                @RequestBody String data) {
+                                @RequestParam (value = "bucket", required = false) String bucket,
+                                @RequestParam (value = "file", required = false) MultipartFile[] files) {
         Coco coco = Coco.InitCoco;
         coco.message = "success";
         coco.code = 200;
         Response<?> response = null;
         try {
 
-            User validate = validate(appid, userid, data);
+            User validate = validate(appid, userid);
 
 
         } catch (TypeException message) {
