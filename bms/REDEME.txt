@@ -1,1 +1,2 @@
 1. 本项目是一个高仿CSDN的博客项目，后端由SpringCloud Alibaba搭建。
+2. 项目使用的中间件 需要使用到 docker 来完成, 具体可查看docker-compose文件

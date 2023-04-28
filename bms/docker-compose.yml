@@ -1,0 +1,176 @@
+version: "3.1"
+
+services:
+
+  # microService:
+
+  #   image: zzyy_docker:1.6
+
+  #   container_name: ms01
+
+  #   ports:
+
+  #     - "6001:6001"
+
+  #   volumes:
+
+  #     - /app/microService:/data
+
+  #   networks: 
+
+  #     - atguigu_net 
+
+  #   depends_on: 
+
+  #     - redis
+
+  #     - mysql
+
+
+
+  redis:
+    image: redis:bullseye
+    ports:
+      - "6379:6379"
+    volumes:
+      - /home/brother/docker/redis/config/redis.conf:/etc/redis/redis.conf
+      - /home/brother/docker/redis/data:/data
+    # command: redis-server /etc/redis/redis.conf
+
+
+
+  mysql:
+    image: mysql:8.0.32-debian
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
+        # MYSQL_DATABASE: 'db2021'
+        # MYSQL_USER: 'zzyy'
+        # MYSQL_PASSWORD: 'zzyy123'
+    ports:
+      - "3306:3306"
+    volumes:
+      # 数据
+      - /home/brother/docker/mysql/data:/var/lib/mysql # 日志
+      - /home/brother/docker/mysql/logs:/var/lib/mysql # 配置
+      - /home/brother/docker/mysql/config/my.cnf:/etc/my.cnf
+
+    command: --default-authentication-plugin=mysql_native_password #解决外部无法访问  
+
+  es:
+    image: elasticsearch:7.17.9
+    ports:
+      - 9200:9200
+      - 9300:9300
+    privileged: true
+    environment:
+      - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
+      - "discovery.type=single-node" #以单一节点模式启动
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1096m" #设置使用jvm内存大小
+    volumes:
+      - /home/brother/docker/es/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+      - /home/brother/docker/es/data:/usr/share/elasticsearch/data:rw #数据文件挂载
+      - /home/brother/docker/es/logs:/user/share/elasticsearch/logs:rw
+
+  kibana:
+    image: kibana:7.17.9
+    ports:
+      - 5601:5601
+    privileged: true
+    environment:
+      # - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
+      # - "discovery.type=single-node" #以单一节点模式启动
+      # - "ES_JAVA_OPTS=-Xms512m -Xmx1096m" #设置使用jvm内存大小
+      - ELASTICSEARCH_HOSTS=http://192.168.0.104:9200
+      # volumes:
+      #   - /home/brother/docker/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml #配置文件
+      #   - /home/brother/docker/kibana/data:/usr/share/kibana/data #数据文件挂载
+
+  nacos:
+    image: nacos/nacos-server:2.0.2
+    ports:
+      - 8848:8848
+    environment:
+      #  单例模式
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+    volumes:
+      - /home/brother/docker/nacos/config/custom.properties:/home/nacos/init.d/custom.properties
+      - /home/brother/docker/nacos/logs:/home/nacos/logs
+
+  pgsql:
+    image: postgres:10.21-alpine
+    environment:
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5432:5432
+    volumes:
+      - /home/brother/docker/pgsql/data:/var/lib/postgresql/data
+
+  # 文件数据库 
+  pgsql2:
+    image: postgres:10.21-alpine
+    environment:
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5433:5432
+    volumes:
+      - /home/brother/docker/pgsql/data:/var/lib/postgresql/data
+
+  # por
+  portainer:
+    image: portainer/portainer-ce
+    # environment:
+    #   - POSTGRES_PASSWORD=123456
+    restart: always
+    ports:
+      - 8000:8000
+      - 8999:9000
+    volumes:
+      # 必须挂在这个数据卷，否则找不到本地docker
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # rabbitMQ
+  rabbitMQ:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=ljx
+      - RABBITMQ_DEFAULT_PASS=123456
+    ports:
+      - 15672:15672
+      - 5672:5672
+      # volumes:
+      # 必须挂在这个数据卷，否则找不到本地docker
+      # - /var/run/docker.sock:/var/run/docker.sock
+
+
+      # nginx:
+      #   image: nginx:1.24 # 镜像名称
+      #   container_name: nginx # 容器名字
+      #   restart: always # 开机自动重启
+      #   ports:
+      #     # 端口号绑定（宿主机:容器内）
+      #     - '20000:9000'
+      #     # - '443:443'
+      #   volumes:
+      #     # 目录映射（宿主机:容器内）
+      #     - /home/brother/docker/vue/nginx.conf:/etc/nginx/nginx.conf:ro ###配置文件
+      #     # - /home/brother/docker/vue/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      #     - /home/brother/docker/vue/dist:/usr/share/nginx/html ###这里面放置项目目录
+
+
+
+  minio:
+    image: bitnami/minio:2023.4.20-debian-11-r2 # 镜像名称
+    restart: always # 开机自动重启
+    ports:
+      # 端口号绑定（宿主机:容器内）
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=minio-root-user
+      - MINIO_ROOT_PASSWORD=minio-root-password
+      - MINIO_SKIP_CLIENT=yes
+    volumes:
+      # 目录映射（宿主机:容器内）需要 chmod -R 777 进行开放权限 不然没权限就起不起来
+      - /home/brother/docker/minio/data:/data ###配置文件
