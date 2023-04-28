@@ -44,6 +44,8 @@ public class CommentMgr {
     private EsTemplate esTemplate;
 
     private String getUserName(User user) {
+        if (user.getId() == null || user.getId() <= 0) throw new TypeException("E000001_02");
+
         String userByid = userOpenFeign.getUserByid(user.getAppId(), user.getId());
         return ResponseParse.getUserName(userByid, "name");
     }
@@ -97,8 +99,8 @@ public class CommentMgr {
         }
         // 开另一个线程去查询点赞索引库，主线程继续查询评论相关信息
         Future<CommentVo.Likes> invoke = ThreadUtils.invoke(() -> {
-            Map<String,Long> likeMap = new HashMap<>();
-            Map<Integer,List<String>> userList = new HashMap<>();
+            Map<String, Long> likeMap = new HashMap<>();
+            Map<Integer, List<String>> userList = new HashMap<>();
             List<String> lists = new CopyOnWriteArrayList<>();
             CommentVo.Likes likes = new CommentVo.Likes();
             TermQueryBuilder textId1 = QueryBuilders.termQuery("textId", textId);
@@ -122,7 +124,7 @@ public class CommentMgr {
                 for (Terms.Bucket bucket : buckets) {
                     String parentComentId = (String) bucket.getKey();
                     long count = bucket.getDocCount();
-                    likeMap.put(parentComentId,count);
+                    likeMap.put(parentComentId, count);
                 }
             }
             Integer id = user.getId();
@@ -135,7 +137,7 @@ public class CommentMgr {
                         lists.add(parentComentId);
                     }
                 }
-                userList.put(id,lists);
+                userList.put(id, lists);
             }
             likes.setCommenLikes(likeMap);
             likes.setLikes(userList);
@@ -187,8 +189,7 @@ public class CommentMgr {
         searchHits1.forEach(item -> {
             foorDataList.add(item.getContent());
         });
-        Map<String, List<Comment>> collect = foorDataList.stream().collect(Collectors.groupingBy(Comment::getFoor));
-
+        Map<String, List<Comment>> collect = foorDataList.stream().collect(Collectors.groupingBy(Comment :: getFoor));
 
 
         commentVo.setFoors(data);
@@ -204,10 +205,10 @@ public class CommentMgr {
      * 如果没有点过赞，那么调用该接口就是点赞了
      */
     @SneakyThrows
-    public void setCommentLike(User user, String commentId,Integer textId) {
-        if (StringUtils.isEmp(commentId)) {
-            throw new TypeException("E0000003_002");
-        }
+    public void setCommentLike(User user, String commentId, Integer textId) {
+        if (StringUtils.isEmp(textId)) throw new TypeException("E0000003_001");
+        if (StringUtils.isEmp(commentId)) throw new TypeException("E0000003_002");
+
         getUserName(user);
         boolean likeIndex = esTemplate.indexInclude(IndexName.Like);
         // 先检查是否存在该索引库

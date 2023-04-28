@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  Queue.QueueName,\
+  ExChange.ExChange,\
+  Bind.BindIng
