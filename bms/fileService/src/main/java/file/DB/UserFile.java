@@ -1,7 +1,9 @@
 package file.DB;
 
 import Pojo.DB.Base;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
  * 用于记录用户的头像文件
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserFile extends Base {
 
     private Integer userId;
