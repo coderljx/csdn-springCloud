@@ -36,7 +36,12 @@ public class Response<T> {
 
     public Response(Coco coco) {
         this.status = coco.code;
-        this.msg = coco.message;
+        // 如果是系统出现了预料之外的错误，我们不能直接抛出给用户，只需要返回系统错误即可
+        if (coco.code == -101) {
+            this.msg = "系统错误,请联系管理员!";
+        }else {
+            this.msg = coco.message;
+        }
     }
 
     public Response(Coco coco, T data) {

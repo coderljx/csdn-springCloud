@@ -68,9 +68,45 @@ public class FileService extends Validate {
         coco.message = "success";
         coco.code = 200;
         Response<?> response = null;
+        String preUrl = "";
         try {
             User validate = validate(appid, userid);
 
+            preUrl = fileMgr.getPreUrl(bucket, name);
+
+        } catch (TypeException message) {
+            coco = UUID.ExceptionFill(message);
+        } catch (DataException dataException) {
+            coco.code = -102;
+            coco.message = dataException.getMessage();
+        } catch (Exception e) {
+            coco.code = -101;
+            coco.message = e.getMessage();
+            e.printStackTrace();
+        } finally {
+            response = new Response<>(coco,preUrl);
+        }
+        return response;
+    }
+
+
+
+
+
+    @DeleteMapping ("/delFile/{appid}")
+    @LogEs (url = "file/delFile", dec = "删除文件")
+    public Response<?> delFile(@PathVariable ("appid") String appid,
+                               @RequestParam (value = "userid", required = false) Integer userid,
+                               @RequestParam (value = "bucket", required = false) String bucket,
+                               @RequestParam (value = "name", required = false) String name) {
+        Coco coco = Coco.InitCoco;
+        coco.message = "success";
+        coco.code = 200;
+        Response<?> response = null;
+        try {
+            User validate = validate(appid, userid);
+
+            fileMgr.delFile(validate,bucket, name);
 
         } catch (TypeException message) {
             coco = UUID.ExceptionFill(message);
@@ -86,5 +122,8 @@ public class FileService extends Validate {
         }
         return response;
     }
+
+
+
 
 }
