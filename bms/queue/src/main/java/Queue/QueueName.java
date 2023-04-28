@@ -15,10 +15,10 @@ import javax.xml.ws.WebEndpoint;
 public class QueueName {
     private final Logger mylog = LoggerFactory.getLogger(QueueName.class);
 
-    @Bean
-    public Queue queue() {
-        return new Queue("as");
-    }
+//    @Bean
+//    public Queue queue() {
+//        return new Queue("as");
+//    }
 
 
 }
