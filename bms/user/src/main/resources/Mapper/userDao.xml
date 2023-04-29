@@ -41,10 +41,13 @@
           and name = #{user.name}
           and is_delete = 0
     </select>
+
+
     <select id="queryUserFormPhone" resultType="Pojo.DB.User">
         select id, name, phone
         from user
         where phone = #{user.phone}
+          and password = #{user.password}
           and is_delete = 0
     </select>
 

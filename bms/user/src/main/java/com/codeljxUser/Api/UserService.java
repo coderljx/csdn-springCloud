@@ -1,14 +1,13 @@
 package com.codeljxUser.Api;
 
 
-import Pojo.DB.Coco;
+import Pojo.Consumer.Consumet;
 import Pojo.DB.Follow;
 import Pojo.DB.Response;
 import Pojo.DB.User;
 import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.StringUtils;
-import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import com.alibaba.fastjson2.JSONObject;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/user")
@@ -30,49 +29,15 @@ public class UserService extends Validate {
     @LogEs(url = "/user/login", dec = "用户登录")
     public Response<?> userLogin(
             @PathVariable String appid,
-            @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
     ) {
-        User user = null;
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
-//            validate(appid,userid,data);
-            user = JSONObject.parseObject(data, User.class);
-            Map map = JSONObject.parseObject(data, Map.class);
-            int status = (int) map.get("status");
-
-            switch (status) {
-//                case 1 : break;
-//                case 2 : break;
-                case 3:
-                    if (StringUtils.isEmp(user.getName())) {
-                        throw new DataException("用户名不能为空");
-                    }
-                    if (StringUtils.isEmp(user.getPassword())) {
-                        throw new DataException("密码不能为空");
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-            user = userMagr.loginUser(user, status);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-            e.printStackTrace();
-        } finally {
-            response = new Response<>(coco, user);
-        }
-        return response;
+        return Consumet.Logic(() -> {
+            AtomicReference<User> user = new AtomicReference<>();
+            validate(appid);
+            user.set(JSONObject.parseObject(data, User.class));
+            user.set(userMagr.loginUser(user.get()));
+            return user.get();
+        });
     }
 
 
@@ -84,34 +49,20 @@ public class UserService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
     ) {
-        User user = null;
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
+            AtomicReference<User> user = new AtomicReference<>();
             validate(appid, appkey, sign, data);
-            user = JSONObject.parseObject(data, User.class);
+            user.set(JSONObject.parseObject(data, User.class));
 
-            if (StringUtils.isEmp(user.getName())) {
+            if (StringUtils.isEmp(user.get().getName())) {
                 throw new DataException("用户名不能为空");
             }
-            if (StringUtils.isEmp(user.getPassword())) {
+            if (StringUtils.isEmp(user.get().getPassword())) {
                 throw new DataException("密码不能为空");
             }
-            userMagr.registUser(user);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            userMagr.registUser(user.get());
+            return null;
+        });
     }
 
 
@@ -123,31 +74,15 @@ public class UserService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
     ) {
-        User user = null;
-        Coco coco = null;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid, sign, data);
-            user = JSONObject.parseObject(data, User.class);
+            User user = JSONObject.parseObject(data, User.class);
 
             if (StringUtils.isEmp(user.getName())) {
                 throw new TypeException("E000001_06");
             }
-            coco = Coco.ok;
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco = Coco.InitCoco;
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco = Coco.InitCoco;
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -159,9 +94,7 @@ public class UserService extends Validate {
             @RequestParam(value = "", required = false) Integer roleid,
             @RequestParam(value = "", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid, sign);
 
             if (StringUtils.isEmp(userid + "")) {
@@ -172,20 +105,8 @@ public class UserService extends Validate {
             }
 
             userMagr.setUserRole(roleid, userid);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -196,25 +117,7 @@ public class UserService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestParam(value = "", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        List<User> user = null;
-        Response<?> response = null;
-        try {
-            user = userMagr.getUser();
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco, user);
-        }
-        return response;
+        return Consumet.Logic(() -> userMagr.getUser());
     }
 
 
@@ -226,26 +129,11 @@ public class UserService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestParam(value = "", required = false) Integer delUserid
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid, sign);
             userMagr.deleteUser(delUserid, userid);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -257,27 +145,12 @@ public class UserService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid, data);
 
             userMagr.followUser(validate);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -289,27 +162,12 @@ public class UserService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid, data);
 
             userMagr.unFollowUser(validate);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -320,29 +178,8 @@ public class UserService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestParam(value = "", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        User res = new User();
-        try {
-            res = userMagr.getUserLoginStatus(userid);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco, res);
-        }
-        return response;
+        return Consumet.Logic(() -> userMagr.getUserLoginStatus(userid));
     }
-
-
-
 
 
     @GetMapping("/getUserFollow/{appid}")
@@ -352,31 +189,16 @@ public class UserService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestParam(value = "sign", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        List<Follow> userFollow = null;
-        try {
+
+        return Consumet.Logic(() -> {
+            List<Follow> userFollow;
             if (userid == null || userid <= 0) {
                 throw new DataException("userid");
             }
             userFollow = userMagr.getUserFollow(userid);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco,userFollow);
-        }
-        return response;
+            return userFollow;
+        });
     }
-
 
 
 }

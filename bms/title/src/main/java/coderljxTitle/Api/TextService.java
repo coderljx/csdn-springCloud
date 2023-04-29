@@ -1,10 +1,8 @@
 package coderljxTitle.Api;
 
-import Pojo.DB.Coco;
+import Pojo.Consumer.Consumet;
 import Pojo.DB.Response;
 import Pojo.DB.User;
-import Pojo.LjxEx.DataException;
-import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import coderljxTitle.Bean.TextVO;
@@ -38,37 +36,11 @@ public class TextService extends Validate {
             @RequestParam(value = "contextLevel", required = false) Character contextLevel,
             @RequestParam(value = "coverTitle", required = false) String coverTitle
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
-//            if (StringUtils.isEmp(titleStr)) {
-//                throw new DataException("titleStr 不可为空");
-//            }
-//            if (StringUtils.isEmp(String.valueOf(textType))) {
-//                throw new DataException("textType 不可为空");
-//            }
-//            if (StringUtils.isEmp(String.valueOf(contextLevel))) {
-//                throw new DataException("contextLevel 不可为空");
-//            }
-//            if (StringUtils.isEmp(coverTitle)) {
-//                throw new DataException("coverTitle 不可为空");
-//            }
 
+        return Consumet.Logic(() -> {
             textMgr.addUserText(appid, detail, userid, coverPhoto, titleStr, textType, releaseForm, contextLevel, file, coverTitle);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
     @GetMapping("/get/{appid}")
@@ -79,28 +51,13 @@ public class TextService extends Validate {
             @RequestParam(value = "sign", required = false) String sign,
             @RequestParam(value = "id", required = false) Integer id
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        TextVO textList = null;
-        try {
 
-            textList = textMgr.getUserText(userid, id);
+        return Consumet.Logic(() -> {
 
+            TextVO userText = textMgr.getUserText(userid, id);
 
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco, textList);
-        }
-        return response;
+            return userText;
+        });
     }
 
 
@@ -112,27 +69,13 @@ public class TextService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestParam(value = "id", required = false) Integer id
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid, sign);
 
             textMgr.deleteUserText(id, user);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -144,28 +87,12 @@ public class TextService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestParam(value = "id", required = false) Integer id
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid, sign);
 
             textMgr.getAvdText();
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-
-
-        return response;
+            return null;
+        });
     }
 
 
@@ -176,29 +103,14 @@ public class TextService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestParam(value = "sign", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        List<TextVO> followedText = null;
-        try {
+
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid);
 
-            followedText = textMgr.getFollowedText(user);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco, followedText);
-        }
-        return response;
+            List<TextVO> followedText = textMgr.getFollowedText(user);
+            return followedText;
+        });
     }
-
 
 
     @GetMapping("/getHotText/{appid}")
@@ -207,31 +119,15 @@ public class TextService extends Validate {
             @PathVariable String appid,
             @RequestParam(value = "sign", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        List<TextVO> textVOList = null;
-        try {
+
+        return Consumet.Logic(() -> {
             validate(appid);
 
-            textVOList = textMgr.getHotText();
+            List<TextVO> textVOList = textMgr.getHotText();
 
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco, textVOList);
-        }
-        return response;
+            return textVOList;
+        });
     }
-
-
 
 
     @GetMapping("/getTextByUid/{appid}")
@@ -242,30 +138,14 @@ public class TextService extends Validate {
             @RequestParam(value = "sign", required = false) String sign,
             @RequestParam(value = "textId", required = false) Integer textId
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        UserVo userVo = null;
-        try {
+
+        return Consumet.Logic(() -> {
             validate(appid);
 
-            userVo = textMgr.getTextByUid(userid,textId);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco,userVo);
-        }
-        return response;
+            UserVo userVo = textMgr.getTextByUid(userid, textId);
+            return userVo;
+        });
     }
-
 
 
 }

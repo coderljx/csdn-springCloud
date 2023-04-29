@@ -5,6 +5,7 @@ import Pojo.DB.Follow;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxRedis.RedisString;
+import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.UUID;
 import Pojo.SearchArgs;
 import com.codeljxUser.Dao.UserDao;
@@ -28,40 +29,42 @@ public class UserMagr {
 
     /**
      * 用户登录
+     *
      * @param user
      * @throws TypeException
      */
-    public User loginUser(User user,int status){
-        User user1 = null;
-        if (status == 1) {
-            user1 = userDao.queryUserFormPhone(user);
-            if (user1 == null || user1.getName().equals("")) throw new TypeException("E000001_04");
+    public User loginUser(User user) {
+        User searchUser = null;
+        if (StringUtils.isEmp(user.getPhone()) || StringUtils.isEmp(user.getPassword()))
+            throw new TypeException("E000001_11");
+        // 状态为1 使用账号密码登录
+        searchUser = userDao.queryUserFormPhone(user);
+        if (searchUser == null || StringUtils.isEmp(searchUser.getName())) {
+            throw new TypeException("E000001_06");
         }
-        if (status == 3) {
-            user1 = userDao.queryUserFormPwd(user);
-            if (user1 == null || user1.getName().equals("")) throw new TypeException("E000001_05");
-        }
+
         String uuid = UUID.getUUID();
-        string.setString(user1.getId() + "",uuid);
-        return user1;
+        string.setString(searchUser.getId() + "", uuid);
+        return searchUser;
     }
 
 
     public void updateUser(User user) {
-        userDao.updateUser(user,"ljx");
+        userDao.updateUser(user, "ljx");
     }
 
     /**
      * 设置用户权限
+     *
      * @param roleid
      */
-    public void setUserRole(Integer roleid,Integer userid){
+    public void setUserRole(Integer roleid, Integer userid) {
         User user = userDao.querUserById(userid);
         user.setRoleid(roleid);
-        userDao.updateUser(user,user.getName());
+        userDao.updateUser(user, user.getName());
     }
-    
-    
+
+
     public List<User> getUser() {
         List<User> users = userDao.queryUser();
         return users;
@@ -69,16 +72,18 @@ public class UserMagr {
 
     /**
      * 删除用户
+     *
      * @param userid 用户id
      */
-    public void deleteUser(Integer delUserid,Integer userid){
+    public void deleteUser(Integer delUserid, Integer userid) {
         User user = userDao.querUserById(userid);
-        userDao.deleteUser(delUserid,user.getName());
+        userDao.deleteUser(delUserid, user.getName());
     }
 
 
     /**
      * 关注用户接口，只支持单个操作
+     *
      * @param user
      */
     public void followUser(User user) {
@@ -91,13 +96,14 @@ public class UserMagr {
          */
         Follow follow = userDao.queryFollow(user.getId(), Integer.parseInt(condition.getValue()));
         if (follow == null || follow.getId() <= 0) {
-            userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()),user1.getName());
+            userDao.followUser(user.getId(), Integer.parseInt(condition.getValue()), user1.getName());
         }
     }
 
 
     /**
      * 取关用户,支持批量取关
+     *
      * @param user
      */
     public void unFollowUser(User user) {
@@ -106,13 +112,14 @@ public class UserMagr {
         for (SearchArgs.Condition child : children) {
             followList.add(child.getValue());
         }
-        userDao.unFollowUser(user.getId(),followList);
+        userDao.unFollowUser(user.getId(), followList);
     }
 
 
     /**
      * 获取用户登录状态，
      * 查询redis中 该用户是否登录
+     *
      * @param userid
      * @return
      */
@@ -128,16 +135,13 @@ public class UserMagr {
 
     /**
      * 获取当前用户的关注人列表
+     *
      * @param userid
      */
     public List<Follow> getUserFollow(Integer userid) {
         List<Follow> userFollow = userDao.getUserFollow(userid);
         return userFollow;
     }
-
-
-
-
 
 
 }

@@ -1,10 +1,8 @@
 package coderljxTitle.Api;
 
-import Pojo.DB.Coco;
+import Pojo.Consumer.Consumet;
 import Pojo.DB.Response;
 import Pojo.DB.User;
-import Pojo.LjxEx.DataException;
-import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.TextDetailMgr;
@@ -28,30 +26,14 @@ public class TextDetailService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestBody String data
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid, data);
 
             textDetailMgr.addTextDetail(user);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
-
-
 
 
     @PostMapping("/setTextDetail/{appid}")
@@ -62,29 +44,14 @@ public class TextDetailService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestBody String data
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid, data);
 
             textDetailMgr.updateTextDetail(user);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
-
 
 
     @DeleteMapping("/delTextDetail/{appid}")
@@ -95,30 +62,14 @@ public class TextDetailService extends Validate {
             @RequestParam(value = "userid", required = false) Integer userid,
             @RequestParam(value = "textId", required = false) Integer textId
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid);
 
-            textDetailMgr.delTextDetail(user,textId);
-
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            textDetailMgr.delTextDetail(user, textId);
+            return null;
+        });
     }
-
-
 
 
 }

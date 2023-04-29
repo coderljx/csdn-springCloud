@@ -1,13 +1,11 @@
 package coderljxTitle.Api;
 
-import Pojo.DB.Coco;
+import Pojo.Consumer.Consumet;
 import Pojo.DB.Module;
 import Pojo.DB.Response;
 import Pojo.DB.User;
-import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxUtils.MapUtils;
-import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import coderljxTitle.Mgr.ClassMgr;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,27 +31,12 @@ public class ClassService extends Validate {
             @PathVariable String appid,
             @RequestParam(value = "userid", required = false) Integer userid
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        List<Module> data = null;
-        try {
+
+        return Consumet.Logic(() -> {
             validate(appid);
 
-            data = moduleMgr.queryModule();
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception message) {
-            coco.code = -101;
-            coco.message = message.getMessage();
-        } finally {
-            response = new Response<>(coco, data);
-        }
-        return response;
+            return moduleMgr.queryModule();
+        });
     }
 
 
@@ -66,27 +48,13 @@ public class ClassService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestBody String data
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid, sign, data);
             Module module = MapUtils.MapToObject(data, Module.class);
 
             moduleMgr.addModules(module, user);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -98,30 +66,15 @@ public class ClassService extends Validate {
             @RequestParam(value = "", required = false) String sign,
             @RequestParam(value = "id", required = false) Integer id
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User user = validate(appid, userid, sign);
 
             if (id == null || id <= 0) {
                 throw new TypeException("E000003");
             }
-
             moduleMgr.delModules(id, user);
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
@@ -131,27 +84,12 @@ public class ClassService extends Validate {
             @PathVariable String appid,
             @RequestParam(value = "", required = false) String sign
     ) {
-        Coco coco = Coco.InitCoco;
-        Response<?> response = null;
-        List<String> res = new ArrayList<>();
-        try {
-            validate(appid, sign);
-            res = moduleMgr.getLinks();
 
-            coco.code = 200;
-            coco.message = "Success";
-        } catch (Pojo.LjxEx.TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-        } finally {
-            response = new Response<>(coco, res);
-        }
-        return response;
+        return Consumet.Logic(() -> {
+            validate(appid, sign);
+            List<String> res = moduleMgr.getLinks();
+            return res;
+        });
     }
 
 

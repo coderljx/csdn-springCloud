@@ -65,7 +65,7 @@ public class UUID {
         String message = exception.getMessage();
         Coco coco = Coco.ok;
         coco.message = getCNException(message);
-        coco.code = -101;
+        coco.code = -103;
         return coco;
     }
 

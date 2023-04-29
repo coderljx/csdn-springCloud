@@ -1,11 +1,8 @@
 package file.Api;
 
-import Pojo.DB.Coco;
+import Pojo.Consumer.Consumet;
 import Pojo.DB.Response;
 import Pojo.DB.User;
-import Pojo.LjxEx.DataException;
-import Pojo.LjxEx.TypeException;
-import Pojo.LjxUtils.UUID;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
 import file.Mgr.FileMgr;
@@ -17,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 
-@RequestMapping ("/file")
+@RequestMapping("/file")
 @RestController
 public class FileService extends Validate {
     private final Logger mylog = LoggerFactory.getLogger(FileService.class);
@@ -27,103 +24,54 @@ public class FileService extends Validate {
     private FileMgr fileMgr;
 
 
-    @PostMapping ("/saveFile/{appid}")
-    @LogEs (url = "file/saveFile", dec = "上传文件")
-    public Response<?> saveFile(@PathVariable ("appid") String appid,
-                                @RequestParam (value = "userid", required = false) Integer userid,
-                                @RequestParam (value = "bucket", required = false) String bucket,
-                                @RequestParam (value = "file", required = false) MultipartFile[] files) {
-        Coco coco = Coco.InitCoco;
-        coco.message = "success";
-        coco.code = 200;
-        Response<?> response = null;
-        try {
+    @PostMapping("/saveFile/{appid}")
+    @LogEs(url = "file/saveFile", dec = "上传文件")
+    public Response<?> saveFile(@PathVariable("appid") String appid,
+                                @RequestParam(value = "userid", required = false) Integer userid,
+                                @RequestParam(value = "bucket", required = false) String bucket,
+                                @RequestParam(value = "file", required = false) MultipartFile[] files) {
 
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid);
 
 
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-            e.printStackTrace();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
 
 
-    @GetMapping ("/getFile/{appid}")
-    @LogEs (url = "file/getFile", dec = "获取文件访问路径")
-    public Response<?> getFile(@PathVariable ("appid") String appid,
-                               @RequestParam (value = "userid", required = false) Integer userid,
-                               @RequestParam (value = "bucket", required = false) String bucket,
-                               @RequestParam (value = "name", required = false) String name) {
-        Coco coco = Coco.InitCoco;
-        coco.message = "success";
-        coco.code = 200;
-        Response<?> response = null;
-        String preUrl = "";
-        try {
+    @GetMapping("/getFile/{appid}")
+    @LogEs(url = "file/getFile", dec = "获取文件访问路径")
+    public Response<?> getFile(@PathVariable("appid") String appid,
+                               @RequestParam(value = "userid", required = false) Integer userid,
+                               @RequestParam(value = "bucket", required = false) String bucket,
+                               @RequestParam(value = "name", required = false) String name) {
+
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid);
 
-            preUrl = fileMgr.getPreUrl(bucket, name);
+            String preUrl = fileMgr.getPreUrl(bucket, name);
 
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-            e.printStackTrace();
-        } finally {
-            response = new Response<>(coco,preUrl);
-        }
-        return response;
+            return preUrl;
+        });
     }
 
 
+    @DeleteMapping("/delFile/{appid}")
+    @LogEs(url = "file/delFile", dec = "删除文件")
+    public Response<?> delFile(@PathVariable("appid") String appid,
+                               @RequestParam(value = "userid", required = false) Integer userid,
+                               @RequestParam(value = "bucket", required = false) String bucket,
+                               @RequestParam(value = "name", required = false) String name) {
 
-
-
-    @DeleteMapping ("/delFile/{appid}")
-    @LogEs (url = "file/delFile", dec = "删除文件")
-    public Response<?> delFile(@PathVariable ("appid") String appid,
-                               @RequestParam (value = "userid", required = false) Integer userid,
-                               @RequestParam (value = "bucket", required = false) String bucket,
-                               @RequestParam (value = "name", required = false) String name) {
-        Coco coco = Coco.InitCoco;
-        coco.message = "success";
-        coco.code = 200;
-        Response<?> response = null;
-        try {
+        return Consumet.Logic(() -> {
             User validate = validate(appid, userid);
 
-            fileMgr.delFile(validate,bucket, name);
+            fileMgr.delFile(validate, bucket, name);
 
-        } catch (TypeException message) {
-            coco = UUID.ExceptionFill(message);
-        } catch (DataException dataException) {
-            coco.code = -102;
-            coco.message = dataException.getMessage();
-        } catch (Exception e) {
-            coco.code = -101;
-            coco.message = e.getMessage();
-            e.printStackTrace();
-        } finally {
-            response = new Response<>(coco);
-        }
-        return response;
+            return null;
+        });
     }
-
-
 
 
 }
