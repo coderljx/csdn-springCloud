@@ -64,10 +64,14 @@ public class ResponseParse {
      */
     public static JSONObject getJsonObject() {
         Object data = responseA.getData();
+        if (data == null) return null;
+
         if (data instanceof JSONObject) {
              return (JSONObject) data;
         }
-        return null;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",data);
+        return jsonObject;
     }
 
 

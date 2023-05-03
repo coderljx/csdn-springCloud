@@ -19,4 +19,14 @@ public class User extends Base {
     private String avatar; // 用户的头像
 
     private SearchArgsMap searchArgsMap;
+
+
+    public User(){
+    }
+
+
+    public User(Integer id){
+         super.setId(id);
+    }
+
 }

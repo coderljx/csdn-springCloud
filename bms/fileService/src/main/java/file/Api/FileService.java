@@ -25,17 +25,32 @@ public class FileService extends Validate {
 
 
     @PostMapping("/saveFile/{appid}")
-    @LogEs(url = "file/saveFile", dec = "上传文件")
+    @LogEs(url = "file/saveFile", dec = "用户上传头像")
     public Response<?> saveFile(@PathVariable("appid") String appid,
                                 @RequestParam(value = "userid", required = false) Integer userid,
                                 @RequestParam(value = "bucket", required = false) String bucket,
-                                @RequestParam(value = "file", required = false) MultipartFile[] files) {
+                                @RequestParam(value = "file", required = false) MultipartFile files) {
 
         return Consumet.Logic(() -> {
             User validate = validate(appid, userid);
 
+            fileMgr.saveFile(validate, bucket, files);
 
             return null;
+        });
+    }
+
+
+    @GetMapping("/getUserFile/{appid}")
+    @LogEs(url = "file/getUserFile", dec = "获取用户头像的文件访问路径")
+    public Response<?> getUserFile(@PathVariable("appid") String appid,
+                                   @RequestParam(value = "userid", required = false) Integer userid) {
+
+        return Consumet.Logic(() -> {
+            User user = validate(appid, userid);
+
+            String userFile = fileMgr.getUserFile(user);
+            return userFile;
         });
     }
 

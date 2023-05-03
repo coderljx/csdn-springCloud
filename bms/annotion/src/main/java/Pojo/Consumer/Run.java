@@ -1,5 +1,6 @@
 package Pojo.Consumer;
 
+@FunctionalInterface
 public interface Run<T> {
 
     /**

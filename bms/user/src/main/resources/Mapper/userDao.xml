@@ -24,7 +24,8 @@
         </foreach>
     </delete>
 
-    <insert id="insertUser">
+<!--    新增一个用户后，返回该新增用户的id -->
+    <insert id="insertUser" useGeneratedKeys = "true" keyProperty = "id">
         insert into user (name, phone, address, password, create_time)
             value (#{user.name},#{user.phone},#{user.address},#{user.password},now())
     </insert>

@@ -28,15 +28,16 @@ public class UserService extends Validate {
     @PostMapping("/login/{appid}")
     @LogEs(url = "/user/login", dec = "用户登录")
     public Response<?> userLogin(
-            @PathVariable String appid,
+            @PathVariable(value = "appid") Integer appid,
             @RequestBody String data
     ) {
         return Consumet.Logic(() -> {
-            AtomicReference<User> user = new AtomicReference<>();
-            validate(appid);
-            user.set(JSONObject.parseObject(data, User.class));
-            user.set(userMagr.loginUser(user.get()));
-            return user.get();
+            User user;
+            validate(String.valueOf(appid));
+            user = JSONObject.parseObject(data, User.class);
+            user.setAppId(appid);
+            User resUser = userMagr.loginUser(user);
+            return resUser;
         });
     }
 
@@ -60,8 +61,8 @@ public class UserService extends Validate {
             if (StringUtils.isEmp(user.get().getPassword())) {
                 throw new DataException("密码不能为空");
             }
-            userMagr.registUser(user.get());
-            return null;
+            User userData = userMagr.registUser(user.get());
+            return userData;
         });
     }
 

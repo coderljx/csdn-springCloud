@@ -5,9 +5,11 @@ import Pojo.DB.Follow;
 import Pojo.DB.User;
 import Pojo.LjxEx.TypeException;
 import Pojo.LjxRedis.RedisString;
+import Pojo.LjxUtils.ResponseParse;
 import Pojo.LjxUtils.StringUtils;
 import Pojo.LjxUtils.UUID;
 import Pojo.SearchArgs;
+import com.alibaba.fastjson2.JSONObject;
 import com.codeljxUser.Dao.UserDao;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,14 @@ public class UserMagr {
     private RedisString string;
     @Resource
     private UserDao userDao;
+    @Resource
+    private Pojo.openFeign.FileOpenFeign fileOpenFeign;
 
-    public void registUser(User user) {
+    public User registUser(User user) {
         userDao.insertUser(user);
+
+        User resUser = new User(user.getId());
+        return resUser;
     }
 
     /**
@@ -43,8 +50,15 @@ public class UserMagr {
             throw new TypeException("E000001_06");
         }
 
+        // 用户的账号密码验证成功后，会直接将用户的数据写入到redis中,只有redis中有数据的用户 才算是登录有效的
         String uuid = UUID.getUUID();
         string.setString(searchUser.getId() + "", uuid);
+
+        String userAvactor = fileOpenFeign.getUserAvactor(user.getAppId(), searchUser.getId());
+        JSONObject jsonObject = ResponseParse.getJsonObject(userAvactor);
+        if (jsonObject != null && jsonObject.containsKey("data")) {
+            searchUser.setAvatar((String) jsonObject.get("data"));
+        }
         return searchUser;
     }
 

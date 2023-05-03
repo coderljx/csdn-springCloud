@@ -1,6 +1,7 @@
 package file.Dao;
 
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * 操作用户头像与文件的对应关系的
  */
+@Mapper
 public interface UserFileDao {
 
     /**
@@ -24,7 +26,7 @@ public interface UserFileDao {
      * @param userId
      * @return
      */
-    List<file.DB.UserFile> getUserFileInfo(@Param("userId") Integer userId);
+    List<file.DB.UserFileVo> getUserFileInfo(@Param("userId") Integer userId);
 
 
 

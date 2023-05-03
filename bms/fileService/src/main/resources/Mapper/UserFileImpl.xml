@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="file.Dao.UserFileDao">
+
+
+    <insert id="addUserFile">
+        insert into userfile(file_id, user_id, create_by, create_time)
+        values (#{fileId}, #{userId}, #{userId}, now());
+    </insert>
+
+
+    <delete id="delUserFile"></delete>
+
+
+    <select id="getUserFileInfo" resultType="file.DB.UserFileVo">
+        select f.file_name "fileName", f.bucket
+        from userfile uf
+                 left join file f on uf.file_id = f.id
+        where uf.is_delete = '0'
+          and f.is_delete = '0'
+          and uf.user_id = #{userId}
+        order by uf.create_by desc;
+    </select>
+
+
+</mapper>

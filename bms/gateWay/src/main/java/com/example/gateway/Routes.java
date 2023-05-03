@@ -29,6 +29,9 @@ public class Routes {
                 .route(per ->
                         per.path("/commentService/**")
                                 .uri("http://localhost:9005"))
+                .route(per ->
+                        per.path("/fileService/**")
+                                .uri("http://localhost:9006"))
                 .build();
     }
 

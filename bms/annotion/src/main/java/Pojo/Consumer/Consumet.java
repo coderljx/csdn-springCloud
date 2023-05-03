@@ -31,6 +31,7 @@ public class Consumet {
         } catch (Exception e) {
             coco.code = -101;
             coco.message = e.getMessage();
+            e.printStackTrace();
         } finally {
             response = new Response<>(coco,resource);
         }
