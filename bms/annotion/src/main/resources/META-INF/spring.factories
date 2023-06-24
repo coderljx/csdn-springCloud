@@ -2,4 +2,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 an.Log.LogEsImpl,\
  Pojo.LjxRedis.RedisConfig,\
   Pojo.LjxRedis.RedisString,\
-  Pojo.LjxRedis.RedisTemplate
+  Pojo.LjxRedis.RedisTemplate,\
+  Pojo.LjxSwagger.SwaggerConfig

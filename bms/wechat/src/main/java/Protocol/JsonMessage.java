@@ -1,4 +1,4 @@
-package Prodocol;
+package Protocol;
 
 public class JsonMessage extends Message{
 

@@ -41,7 +41,7 @@ public class UserMagr {
      * @throws TypeException
      */
     public User loginUser(User user) {
-        User searchUser = null;
+        User searchUser;
         if (StringUtils.isEmp(user.getPhone()) || StringUtils.isEmp(user.getPassword()))
             throw new TypeException("E000001_11");
         // 状态为1 使用账号密码登录
@@ -52,7 +52,8 @@ public class UserMagr {
 
         // 用户的账号密码验证成功后，会直接将用户的数据写入到redis中,只有redis中有数据的用户 才算是登录有效的
         String uuid = UUID.getUUID();
-        string.setString(searchUser.getId() + "", uuid);
+        searchUser.setUserLoginKey(uuid);
+        string.setString(searchUser.getId() + "", JSONObject.toJSONString(searchUser));
 
         String userAvactor = fileOpenFeign.getUserAvactor(user.getAppId(), searchUser.getId());
         JSONObject jsonObject = ResponseParse.getJsonObject(userAvactor);
@@ -103,8 +104,11 @@ public class UserMagr {
     public void followUser(User user) {
         List<SearchArgs.Condition> children = user.getSearchArgsMap().getArgsItem().getChildren();
         SearchArgs.Condition condition = children.get(0);
+        //如果这个用户是自己关注自己，那么不允许
+        if (user.getId().equals(Integer.parseInt(condition.getValue()))) {
+            throw new TypeException("E000001_12");
+        }
         User user1 = userDao.querUserById(user.getId());
-
         /**
          * 如果当前用户没有关注过该用户，才能进行关注，不能重复关注
          */
@@ -141,8 +145,10 @@ public class UserMagr {
         if (userid == null || userid <= 0) {
             throw new TypeException("E000001_02");
         }
-        User user = userDao.querUserById(userid);
-        user.setUserLoginKey(string.getKey(userid + ""));
+//        User user = userDao.querUserById(userid);
+//        user.setUserLoginKey(string.getKey(userid + ""));
+        String key = string.getKey(userid + "");
+        User user = JSONObject.parseObject(key, User.class);
         return user;
     }
 
@@ -153,8 +159,7 @@ public class UserMagr {
      * @param userid
      */
     public List<Follow> getUserFollow(Integer userid) {
-        List<Follow> userFollow = userDao.getUserFollow(userid);
-        return userFollow;
+        return userDao.getUserFollow(userid);
     }
 
 

@@ -5,14 +5,11 @@ import Pojo.DB.Response;
 import Pojo.DB.User;
 import Pojo.LjxUtils.Validate;
 import an.Log.LogEs;
-import coderljxTitle.Bean.TextVO;
-import coderljxTitle.Bean.UserVo;
 import coderljxTitle.Mgr.TextMgr;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/text")
@@ -52,12 +49,7 @@ public class TextService extends Validate {
             @RequestParam(value = "id", required = false) Integer id
     ) {
 
-        return Consumet.Logic(() -> {
-
-            TextVO userText = textMgr.getUserText(userid, id);
-
-            return userText;
-        });
+        return Consumet.Logic(() -> textMgr.getUserText(userid, id));
     }
 
 
@@ -107,8 +99,7 @@ public class TextService extends Validate {
         return Consumet.Logic(() -> {
             User user = validate(appid, userid);
 
-            List<TextVO> followedText = textMgr.getFollowedText(user);
-            return followedText;
+            return textMgr.getFollowedText(user);
         });
     }
 
@@ -123,9 +114,7 @@ public class TextService extends Validate {
         return Consumet.Logic(() -> {
             validate(appid);
 
-            List<TextVO> textVOList = textMgr.getHotText();
-
-            return textVOList;
+            return textMgr.getHotText();
         });
     }
 
@@ -142,8 +131,25 @@ public class TextService extends Validate {
         return Consumet.Logic(() -> {
             validate(appid);
 
-            UserVo userVo = textMgr.getTextByUid(userid, textId);
-            return userVo;
+            return textMgr.getTextByUid(userid, textId);
+        });
+    }
+
+
+
+    @PostMapping("/addTextLike/{appid}")
+    @LogEs(url = "/text/addTextLike", dec = "给文章点赞")
+    public Response<?> addTextLike(
+            @PathVariable String appid,
+            @RequestParam(value = "userid", required = false) Integer userid,
+            @RequestParam(value = "sign", required = false) String sign,
+            @RequestParam(value = "textId", required = false) Integer textId
+    ) {
+
+        return Consumet.Logic(() -> {
+            validate(appid);
+
+            return null;
         });
     }
 

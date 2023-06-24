@@ -19,7 +19,7 @@ public class Routes {
         return builder.routes()
                 .route("userService", per ->
                         per.path("/userService/**")
-                                .uri("http://localhost:9001"))
+                                .uri("http://localhost:9007"))
                 .route( per ->
                         per.path("/titleService/**")
                                 .uri("http://localhost:9002"))

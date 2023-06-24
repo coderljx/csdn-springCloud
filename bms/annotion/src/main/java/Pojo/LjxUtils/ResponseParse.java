@@ -6,6 +6,7 @@ import Pojo.LjxEx.DataException;
 import Pojo.LjxEx.TypeException;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.SneakyThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,8 @@ public class ResponseParse {
      * 返回值的data 是一个 数组
      * @return
      */
-    public static <T extends Base> List<T> getArrayObject(String res, Class<T> cls) throws Exception {
+    @SneakyThrows
+    public static <T extends Base> List<T> getArrayObject(String res, Class<T> cls) {
         parseResponse(res);
         Object data = responseA.getData();
         List<T> tList = new CopyOnWriteArrayList<>();

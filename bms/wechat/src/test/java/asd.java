@@ -1,9 +1,17 @@
-import java.nio.charset.StandardCharsets;
+public class asd extends abset {
 
-public class asd {
+    private String name;
+
     public static void main(String[] args) {
-        byte[] bytes = "1.0".getBytes(StandardCharsets.UTF_8);
-        System.out.println(bytes.length);
 
+//        byte[] bytes = "PING".getBytes(CharsetUtil.ISO_8859_1);
+//        System.out.println(bytes.length);
+        abset a = new asd();
+        a.aa();
+    }
+
+    @Override
+    public void a() {
+        System.out.println("a 实现了");
     }
 }

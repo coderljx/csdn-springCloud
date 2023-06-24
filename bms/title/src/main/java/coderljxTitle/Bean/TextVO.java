@@ -63,4 +63,9 @@ public class TextVO extends BeanVo {
      */
     private Character reqUserAction;
 
+    // 文章发布时间距离当前时间，单位：天数
+    private Integer createDay;
+
+    // 根据天数，显示具体有多久
+    private String createDayS;
 }

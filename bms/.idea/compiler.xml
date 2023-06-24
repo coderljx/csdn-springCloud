@@ -20,11 +20,6 @@
         <module name="queue" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="esDB" target="1.8" />
-      <module name="reids" target="1.8" />
-      <module name="untitled" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -33,13 +28,10 @@
       <module name="bms" options="" />
       <module name="comment" options="-parameters" />
       <module name="es" options="-parameters" />
-      <module name="esDB" options="" />
       <module name="fileService" options="-parameters" />
       <module name="gateWay" options="-parameters" />
       <module name="queue" options="-parameters" />
-      <module name="reids" options="-parameters" />
       <module name="title" options="-parameters" />
-      <module name="untitled" options="-parameters" />
       <module name="user" options="-parameters" />
       <module name="wechat" options="-parameters" />
     </option>

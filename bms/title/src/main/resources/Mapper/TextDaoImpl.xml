@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="coderljxTitle.Dao.TextDao">
-
-
     <insert id="addUserText" parameterType="Pojo.DB.Text" useGeneratedKeys="true" keyProperty="id">
         insert into text(detail, uid, create_by, create_time, coverPhoto, titleIdStr, textType, releaseForm,
                          contextLevel, imageStr, coverTitle)
@@ -81,7 +79,8 @@
                t.contextLevel,
                t.imageStr,
                t.coverTitle,
-               u.name userName
+               u.name                         userName,
+               datediff(now(), t.create_time) createDay
         FROM text t
                  LEFT JOIN user u on u.id = t.uid
         WHERE t.is_delete = 0
@@ -107,46 +106,38 @@
                t.imageStr,
                t.coverTitle,
                t.view,
-               u.id as uid,
+               u.id   as uid,
                u.name as userName
         from text t
                  left join user u on t.uid = u.id and u.is_delete = 0
         where t.is_delete = 0
           and t.releaseForm = '1'
-        order by t.view
-            limit 40
+        order by t.view limit 40
     </select>
-
 
 
     <select id="getTextByUid" resultType="coderljxTitle.Bean.UserVo">
         select u.id as userId,
-               u.name as userName,
-               datediff(now(), u.create_time)                                                 as createTime,
-               (select count(1)
-                from text t1
-                where t1.is_delete = 0
-                  and t1.uid = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)) as originalityCount,
-               (select sum(t1.view)
-                from text t1
-                where t1.is_delete = 0
-                  and t1.uid = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)) as viewCount
+        u.name as userName,
+        datediff(now(), u.create_time) as createTime,
+        (select count(1)
+        from text t1
+        where t1.is_delete = 0
+        and t1.uid = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)) as originalityCount,
+        (select sum(t1.view)
+        from text t1
+        where t1.is_delete = 0
+        and t1.uid = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)) as viewCount
         <if test="userid != null and userid > 0">
             ,
             (
-            ifnull((select id from follow where user_id =  #{userid}
+            ifnull((select id from follow where user_id = #{userid}
             and follow_id = (select t.uid from text t where t.id = #{textId} and t.is_delete = 0)),0)
             ) as isFollow
         </if>
         from text t
-                 left join user u on u.id = t.uid and u.is_delete = 0
+        left join user u on u.id = t.uid and u.is_delete = 0
         where t.id = #{textId}
-          and t.is_delete = 0
+        and t.is_delete = 0
     </select>
-
-
-
-
-
-
 </mapper>

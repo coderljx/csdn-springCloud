@@ -1,9 +1,9 @@
 package server;
 
-import Prodocol.ByteToMessage;
-import Prodocol.JsonMessage;
-import Prodocol.Message;
-import Prodocol.MessageToByte;
+import Protocol.ByteToMessage;
+import Protocol.JsonMessage;
+import Protocol.Message;
+import Protocol.MessageToByte;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -44,7 +44,7 @@ public class server {
             }
         });
 
-        ChannelFuture bind = serverBootstrap.bind(19999).sync();
+        ChannelFuture bind = serverBootstrap.bind(20000).sync();
 
         bind.addListener((ChannelFutureListener) channelFuture -> {
             if (bind.isDone()) {

@@ -1,4 +1,4 @@
-package Prodocol;
+package Protocol;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

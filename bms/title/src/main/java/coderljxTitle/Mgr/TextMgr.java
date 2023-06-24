@@ -13,6 +13,7 @@ import Pojo.LjxUtils.UUID;
 import coderljxTitle.Bean.TextVO;
 import coderljxTitle.Bean.UserVo;
 import coderljxTitle.Dao.TextDao;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,7 +131,10 @@ public class TextMgr {
      * 获得关注的人发布的文章
      * @param user
      */
-    public List<TextVO> getFollowedText(User user) throws Exception {
+    @SneakyThrows
+    public List<TextVO> getFollowedText(User user) {
+        if (user.getId() == null || user.getId() <= 0) throw new TypeException("E000001_02");
+
         String userFollow = userOpenFeign.getUserFollow(user.getAppId(), user.getId());
         List<Follow> arrayObject = ResponseParse.getArrayObject(userFollow, Follow.class);
         StringBuilder followIds = new StringBuilder();
@@ -149,7 +153,17 @@ public class TextMgr {
         if (StringUtils.isEmp(followIds.toString())) {
             return new CopyOnWriteArrayList<>();
         }
-        return textDao.getFollowedText(user.getId(), followIds.toString());
+        List<TextVO> followedText = textDao.getFollowedText(user.getId(), followIds.toString());
+        if (!StringUtils.isListEmp(followedText)) {
+            followedText.forEach(item -> {
+                if (item.getCreateDay() > 0) {
+                    item.setCreateDayS(item.getCreateDay() + "天");
+                }else {
+                    item.setCreateDayS("今天");
+                }
+            });
+        }
+        return followedText;
     }
 
 

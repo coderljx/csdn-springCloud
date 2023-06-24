@@ -124,7 +124,7 @@
 
                 <configuration>
                     <!-- 远程Docker的地址 -->
-                    <dockerHost>http://localhost:2375</dockerHost>
+                    <dockerHost>${docker-url}</dockerHost>
                     <!-- 镜像名称、前缀、项目名 -->
                     <imageName>${docker.image.prefix}/${project.artifactId}/${docker.image.version}</imageName>
                     <!--                     <imageName>koko</imageName>-->

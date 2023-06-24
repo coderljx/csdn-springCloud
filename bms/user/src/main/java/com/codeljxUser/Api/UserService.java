@@ -2,7 +2,6 @@ package com.codeljxUser.Api;
 
 
 import Pojo.Consumer.Consumet;
-import Pojo.DB.Follow;
 import Pojo.DB.Response;
 import Pojo.DB.User;
 import Pojo.LjxEx.DataException;
@@ -15,7 +14,6 @@ import com.codeljxUser.service.UserMagr;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
@@ -36,8 +34,7 @@ public class UserService extends Validate {
             validate(String.valueOf(appid));
             user = JSONObject.parseObject(data, User.class);
             user.setAppId(appid);
-            User resUser = userMagr.loginUser(user);
-            return resUser;
+            return userMagr.loginUser(user);
         });
     }
 
@@ -61,8 +58,7 @@ public class UserService extends Validate {
             if (StringUtils.isEmp(user.get().getPassword())) {
                 throw new DataException("密码不能为空");
             }
-            User userData = userMagr.registUser(user.get());
-            return userData;
+            return userMagr.registUser(user.get());
         });
     }
 
@@ -192,12 +188,10 @@ public class UserService extends Validate {
     ) {
 
         return Consumet.Logic(() -> {
-            List<Follow> userFollow;
             if (userid == null || userid <= 0) {
                 throw new DataException("userid");
             }
-            userFollow = userMagr.getUserFollow(userid);
-            return userFollow;
+            return userMagr.getUserFollow(userid);
         });
     }
 

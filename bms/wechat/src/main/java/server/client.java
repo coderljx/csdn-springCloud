@@ -1,9 +1,9 @@
 package server;
 
-import Prodocol.ByteToMessage;
-import Prodocol.JsonMessage;
-import Prodocol.Message;
-import Prodocol.MessageToByte;
+import Protocol.ByteToMessage;
+import Protocol.JsonMessage;
+import Protocol.Message;
+import Protocol.MessageToByte;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -13,7 +13,7 @@ import io.netty.handler.logging.LoggingHandler;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 
-public class a {
+public class client {
 
 
     public static void main(String[] args) throws Exception{
@@ -34,7 +34,7 @@ public class a {
 
                     }
                 });
-        ChannelFuture connect = bootstrap.connect(new InetSocketAddress(19999));
+        ChannelFuture connect = bootstrap.connect(new InetSocketAddress(20000));
 
         connect.addListener((ChannelFutureListener) future -> {
             if (connect.isDone()) {

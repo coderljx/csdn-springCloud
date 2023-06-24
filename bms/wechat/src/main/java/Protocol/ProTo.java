@@ -1,4 +1,4 @@
-package Prodocol;
+package Protocol;
 
 import java.nio.charset.StandardCharsets;
 

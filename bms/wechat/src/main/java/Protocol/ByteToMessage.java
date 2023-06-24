@@ -1,4 +1,4 @@
-package Prodocol;
+package Protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

@@ -21,7 +21,6 @@ public class WsHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
         String text = msg.text();
         System.out.println("客户端消息 ： " + text);
 
-
         /**
          * 不管是什么协议 都是通过管道传输出去
          * 不同过的协议只是 内容不同 本质都是通过 tcp/ip 协议之上构建的
