@@ -16,10 +16,14 @@
         <module name="title" />
         <module name="gateWay" />
         <module name="user" />
+        <module name="hm-dianping" />
         <module name="es" />
         <module name="queue" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="hm" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -30,6 +34,8 @@
       <module name="es" options="-parameters" />
       <module name="fileService" options="-parameters" />
       <module name="gateWay" options="-parameters" />
+      <module name="hm" options="-parameters" />
+      <module name="hm-dianping" options="-parameters" />
       <module name="queue" options="-parameters" />
       <module name="title" options="-parameters" />
       <module name="user" options="-parameters" />

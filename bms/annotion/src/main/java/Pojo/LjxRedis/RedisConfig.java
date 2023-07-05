@@ -1,5 +1,6 @@
 package Pojo.LjxRedis;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
@@ -41,9 +42,10 @@ public class RedisConfig {
 
 
     @Bean
+    @ConditionalOnMissingBean(JedisPool.class)
     public JedisPool jedisPool() {
         JedisPoolConfig config = new JedisPoolConfig();
-        JedisPool jedisPool = new JedisPool(config,"192.168.0.104",6379);
+        JedisPool jedisPool = new JedisPool(config,"192.168.0.100",6379);
         return jedisPool;
     }
 

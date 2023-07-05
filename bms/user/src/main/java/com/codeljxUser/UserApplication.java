@@ -31,11 +31,6 @@ public class UserApplication {
         jedisPoolConfig.setMaxTotal(100);
 
         JedisPool jPool = new JedisPool(jedisPoolConfig, "192.168.0.104", 6379);
-//        Jedis resource = jPool.getResource();
-//        for (int i = 0; i < 100; i++) {
-//
-//        }
-
         return jPool;
     }
 }
